@@ -1,0 +1,3128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>350 Deep Learning & PyTorch Interview Questions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Sora:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --bg: #0f1117;
+        --surface: #171b26;
+        --surface2: #1e2436;
+        --border: #2a3050;
+        --border2: #3a4570;
+        --text: #e8eaf0;
+        --text2: #8b93b0;
+        --text3: #5a6280;
+        --accent: #4ade80;
+        --accent2: #22c55e;
+        --mono: "JetBrains Mono", monospace;
+        --sans: "Sora", sans-serif;
+      }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        font-size: 14px;
+        line-height: 1.6;
+        min-height: 100vh;
+      }
+
+      /* scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--bg);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--border2);
+        border-radius: 99px;
+      }
+
+      /* layout */
+      .app {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: rgba(15, 17, 23, 0.92);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+        padding: 14px 24px;
+      }
+      .topbar-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .logo {
+        font-family: var(--mono);
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--accent);
+        letter-spacing: 0.05em;
+        white-space: nowrap;
+      }
+      .badge {
+        background: #1a2d1a;
+        color: var(--accent);
+        font-family: var(--mono);
+        font-size: 11px;
+        padding: 2px 8px;
+        border-radius: 99px;
+        border: 1px solid #2a4a2a;
+      }
+      .search-wrap {
+        flex: 1;
+        min-width: 200px;
+        position: relative;
+      }
+      .search-wrap input {
+        width: 100%;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 8px 12px 8px 36px;
+        color: var(--text);
+        font-family: var(--sans);
+        font-size: 13px;
+        outline: none;
+        transition: border-color 0.2s;
+      }
+      .search-wrap input:focus {
+        border-color: var(--border2);
+      }
+      .search-wrap input::placeholder {
+        color: var(--text3);
+      }
+      .search-icon {
+        position: absolute;
+        left: 11px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text3);
+        font-size: 15px;
+        pointer-events: none;
+      }
+      .view-btns {
+        display: flex;
+        gap: 6px;
+      }
+      .view-btn {
+        background: transparent;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        color: var(--text2);
+        font-family: var(--sans);
+        font-size: 12px;
+        padding: 6px 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .view-btn.active,
+      .view-btn:hover {
+        border-color: var(--border2);
+        color: var(--text);
+        background: var(--surface2);
+      }
+
+      /* progress bar */
+      .progress-bar {
+        height: 3px;
+        background: var(--surface2);
+        width: 100%;
+      }
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #22c55e, #4ade80);
+        border-radius: 99px;
+        transition: width 0.4s ease;
+      }
+
+      /* main */
+      .main {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 24px;
+        display: flex;
+        gap: 24px;
+        align-items: flex-start;
+      }
+
+      /* sidebar */
+      .sidebar {
+        width: 220px;
+        flex-shrink: 0;
+        position: sticky;
+        top: 70px;
+        max-height: calc(100vh - 90px);
+        overflow-y: auto;
+      }
+      .sidebar-section {
+        margin-bottom: 20px;
+      }
+      .sidebar-label {
+        font-family: var(--mono);
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        color: var(--text3);
+        text-transform: uppercase;
+        margin-bottom: 8px;
+        padding: 0 4px;
+      }
+      .sidebar-btn {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        text-align: left;
+        font-family: var(--sans);
+        font-size: 12px;
+        padding: 5px 8px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.15s;
+        background: transparent;
+        color: var(--text2);
+        gap: 6px;
+      }
+      .sidebar-btn:hover {
+        background: var(--surface2);
+        color: var(--text);
+      }
+      .sidebar-btn.active {
+        background: var(--surface2);
+        color: var(--text);
+        font-weight: 500;
+      }
+      .sidebar-btn .count {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--text3);
+        flex-shrink: 0;
+      }
+      .sidebar-btn .done-count {
+        color: var(--accent);
+        font-family: var(--mono);
+        font-size: 11px;
+      }
+      .tag-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 2px;
+        flex-shrink: 0;
+      }
+
+      /* filter chips */
+      .filter-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 16px;
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 12px;
+        padding: 5px 11px;
+        border-radius: 99px;
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--text2);
+        cursor: pointer;
+        transition: all 0.15s;
+        font-family: var(--sans);
+      }
+      .chip:hover {
+        border-color: var(--border2);
+        color: var(--text);
+      }
+      .chip.on {
+        border-color: #2a4a2a;
+        background: #1a2d1a;
+        color: var(--accent);
+      }
+      .chip.clear {
+        border-color: var(--border);
+        color: var(--text3);
+      }
+      .chip.clear:hover {
+        color: var(--text);
+        border-color: var(--border2);
+      }
+
+      /* question list */
+      .q-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        flex: 1;
+        min-width: 0;
+      }
+      .q-count {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--text3);
+        margin-bottom: 12px;
+      }
+
+      /* question card */
+      .q-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        overflow: hidden;
+        transition: border-color 0.2s;
+      }
+      .q-card:hover {
+        border-color: var(--border2);
+      }
+      .q-card.done {
+        border-color: #1a3a1a;
+      }
+      .q-card.done .q-num {
+        color: var(--accent);
+      }
+      .q-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 12px 14px;
+        cursor: pointer;
+        user-select: none;
+      }
+      .q-num {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--text3);
+        min-width: 30px;
+        padding-top: 2px;
+      }
+      .q-body {
+        flex: 1;
+        min-width: 0;
+      }
+      .q-tags {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+        margin-bottom: 7px;
+      }
+      .tag-pill {
+        font-size: 11px;
+        font-weight: 500;
+        padding: 2px 8px;
+        border-radius: 99px;
+        white-space: nowrap;
+      }
+      .sec-pill {
+        font-size: 11px;
+        padding: 2px 8px;
+        border-radius: 99px;
+        background: var(--surface2);
+        color: var(--text3);
+        border: 1px solid var(--border);
+      }
+      .lvl-pill {
+        font-size: 10px;
+        font-family: var(--mono);
+        padding: 2px 7px;
+        border-radius: 99px;
+        border: 1px solid var(--border);
+        color: var(--text3);
+      }
+      .q-text {
+        font-size: 13.5px;
+        line-height: 1.6;
+        color: var(--text);
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+      }
+      .q-text.expanded {
+        display: block;
+        -webkit-line-clamp: unset;
+      }
+      .q-actions {
+        display: flex;
+        gap: 4px;
+        flex-shrink: 0;
+        padding-top: 2px;
+      }
+      .icon-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        padding: 3px;
+        border-radius: 4px;
+        transition: all 0.15s;
+        color: var(--text3);
+        line-height: 1;
+      }
+      .icon-btn:hover {
+        color: var(--text);
+        background: var(--surface2);
+      }
+      .icon-btn.bmk.on {
+        color: #f59e0b;
+      }
+      .icon-btn.done-btn.on {
+        color: var(--accent);
+      }
+
+      /* stats */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+      .stat-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 16px;
+      }
+      .stat-label {
+        font-size: 11px;
+        color: var(--text3);
+        margin-bottom: 6px;
+        font-family: var(--mono);
+        letter-spacing: 0.05em;
+      }
+      .stat-value {
+        font-size: 26px;
+        font-weight: 500;
+        color: var(--text);
+        font-family: var(--mono);
+      }
+      .stat-value.green {
+        color: var(--accent);
+      }
+      .section-card,
+      .tag-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 16px;
+        margin-bottom: 12px;
+      }
+      .section-card h3,
+      .tag-card h3 {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text2);
+        margin-bottom: 16px;
+        font-family: var(--mono);
+      }
+      .prog-row {
+        margin-bottom: 12px;
+      }
+      .prog-label {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 4px;
+      }
+      .prog-name {
+        font-size: 12px;
+        color: var(--text2);
+      }
+      .prog-nums {
+        font-size: 11px;
+        color: var(--text3);
+        font-family: var(--mono);
+      }
+      .prog-track {
+        background: var(--surface2);
+        border-radius: 99px;
+        height: 5px;
+      }
+      .prog-fill {
+        height: 100%;
+        border-radius: 99px;
+        background: linear-gradient(90deg, #16a34a, #4ade80);
+        transition: width 0.4s;
+      }
+      .tag-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      .tag-bar-track {
+        flex: 2;
+        background: var(--surface2);
+        border-radius: 99px;
+        height: 6px;
+      }
+      .tag-bar-fill {
+        height: 100%;
+        border-radius: 99px;
+      }
+      .tag-name {
+        flex: 1;
+        font-size: 12px;
+        color: var(--text2);
+      }
+      .tag-num {
+        font-size: 11px;
+        font-family: var(--mono);
+        color: var(--text3);
+        min-width: 24px;
+        text-align: right;
+      }
+
+      /* empty */
+      .empty {
+        text-align: center;
+        padding: 48px;
+        color: var(--text3);
+        font-size: 13px;
+      }
+
+      /* header block */
+      .hero {
+        padding: 32px 24px 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .hero h1 {
+        font-size: 28px;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+        margin-bottom: 6px;
+      }
+      .hero h1 span {
+        color: var(--accent);
+      }
+      .hero p {
+        font-size: 13px;
+        color: var(--text3);
+        margin-bottom: 16px;
+      }
+      .progress-meta {
+        display: flex;
+        justify-content: space-between;
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--text3);
+        margin-top: 5px;
+      }
+
+      @media (max-width: 768px) {
+        .sidebar {
+          display: none;
+        }
+        .main {
+          padding: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <div class="topbar">
+        <div class="topbar-inner">
+          <span class="logo">PyTorch.interview</span>
+          <span class="badge">350 questions</span>
+          <div class="search-wrap">
+            <span class="search-icon">🔍</span>
+            <input
+              type="text"
+              id="search"
+              placeholder="Search questions, topics, types…"
+              oninput="render()"
+            />
+          </div>
+          <div class="view-btns">
+            <button
+              class="view-btn active"
+              id="btn-q"
+              onclick="switchView('questions')"
+            >
+              Questions
+            </button>
+            <button class="view-btn" id="btn-s" onclick="switchView('stats')">
+              Progress
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero">
+        <h1>Deep Learning &amp; <span>PyTorch</span> Interview Questions</h1>
+        <p>
+          350 questions · 11 sections · L1 to L4 difficulty · from first
+          principles to production engineering
+        </p>
+        <div class="progress-bar">
+          <div class="progress-fill" id="prog-fill" style="width: 0%"></div>
+        </div>
+        <div class="progress-meta">
+          <span id="prog-label">0 of 350 completed</span>
+          <span id="bmk-label">0 bookmarked</span>
+        </div>
+      </div>
+
+      <div class="main">
+        <!-- sidebar -->
+        <div class="sidebar" id="sidebar">
+          <div class="sidebar-section">
+            <div class="sidebar-label">Sections</div>
+            <button
+              class="sidebar-btn active"
+              id="sec-all"
+              onclick="setSection(null)"
+            >
+              <span>All sections</span><span class="count">350</span>
+            </button>
+            <div id="sec-list"></div>
+          </div>
+          <div class="sidebar-section">
+            <div class="sidebar-label">Question type</div>
+            <div id="tag-list"></div>
+          </div>
+        </div>
+
+        <!-- content -->
+        <div style="flex: 1; min-width: 0">
+          <div id="filter-row" class="filter-row"></div>
+          <div id="q-count" class="q-count"></div>
+          <div id="q-list" class="q-list"></div>
+          <div id="stats-view" style="display: none"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const SECTIONS = [
+        "PyTorch Core & Internals",
+        "ANN & Feedforward Networks",
+        "Convolutional Neural Networks",
+        "Recurrent Neural Networks",
+        "Attention & Transformers",
+        "Optimization Deep Dive",
+        "Loss Functions & Objectives",
+        "Training Techniques & Best Practices",
+        "Generative Models",
+        "LLM / NLP Engineering",
+        "Production & MLOps",
+      ];
+
+      const TAGS = [
+        "Theory",
+        "Math / Proof",
+        "Implement",
+        "Debug / Diagnose",
+        "Design",
+        "Explain Behavior",
+        "Optimize",
+        "Comparison",
+      ];
+
+      const TAG_STYLE = {
+        Theory: { bg: "#1e3a5f", color: "#7dd3fc", border: "#1e4a7f" },
+        "Math / Proof": { bg: "#2d1b69", color: "#c4b5fd", border: "#3d2a80" },
+        Implement: { bg: "#14401a", color: "#86efac", border: "#1a5520" },
+        "Debug / Diagnose": {
+          bg: "#4a1515",
+          color: "#fca5a5",
+          border: "#5a2020",
+        },
+        Design: { bg: "#422006", color: "#fcd34d", border: "#5a3010" },
+        "Explain Behavior": {
+          bg: "#0f3d30",
+          color: "#6ee7b7",
+          border: "#145040",
+        },
+        Optimize: { bg: "#3d1a3a", color: "#f0abfc", border: "#501a50" },
+        Comparison: { bg: "#3a1f0a", color: "#fdba74", border: "#502a10" },
+      };
+
+      const TAG_BAR_COLOR = {
+        Theory: "#7dd3fc",
+        "Math / Proof": "#c4b5fd",
+        Implement: "#86efac",
+        "Debug / Diagnose": "#fca5a5",
+        Design: "#fcd34d",
+        "Explain Behavior": "#6ee7b7",
+        Optimize: "#f0abfc",
+        Comparison: "#fdba74",
+      };
+
+      const LEVELS = {
+        L1: { label: "L1", range: [1, 35] },
+        L2: { label: "L2", range: [36, 140] },
+        L3: { label: "L3", range: [141, 280] },
+        L4: { label: "L4", range: [281, 350] },
+      };
+
+      function getLevel(id) {
+        if (id <= 35) return "L1";
+        if (id <= 140) return "L2";
+        if (id <= 280) return "L3";
+        return "L4";
+      }
+
+      const QUESTIONS = [
+        // SECTION 0: PyTorch Core & Internals (55)
+        {
+          id: 1,
+          s: 0,
+          tag: "Implement",
+          text: "Implement a function that creates a 3D tensor from nested Python lists, computes its transpose along the last two dimensions, and verifies the result by checking shape and element-wise equality without using torch.transpose directly.",
+        },
+        {
+          id: 2,
+          s: 0,
+          tag: "Explain Behavior",
+          text: "Explain exactly what happens in memory when you call .view() versus .reshape() on a non-contiguous tensor in PyTorch. When does each succeed or fail, and why?",
+        },
+        {
+          id: 3,
+          s: 0,
+          tag: "Implement",
+          text: "Implement a custom broadcasting-aware element-wise multiplication function that accepts tensors of arbitrary compatible shapes, applies the operation, and prints the resulting shape and intermediate broadcast shapes at each step.",
+        },
+        {
+          id: 4,
+          s: 0,
+          tag: "Explain Behavior",
+          text: "Explain the difference between torch.Tensor.data and torch.Tensor.detach() and describe a scenario where using .data instead of .detach() leads to a silent correctness bug during training.",
+        },
+        {
+          id: 5,
+          s: 0,
+          tag: "Implement",
+          text: "Implement a function that manually computes the gradient of z = x² + 3xy + y³ with respect to x and y using PyTorch's autograd, then verify your result analytically.",
+        },
+        {
+          id: 6,
+          s: 0,
+          tag: "Explain Behavior",
+          text: "Explain what retain_graph=True does in .backward(), why it is needed in certain training loops, and what memory cost it incurs. Give a concrete use case such as multi-task learning.",
+        },
+        {
+          id: 7,
+          s: 0,
+          tag: "Implement",
+          text: "Implement a custom nn.Module called LinearWithBias that manually manages its weight and bias as nn.Parameter objects, implements forward(), and registers them so they appear in parameters() and state_dict().",
+        },
+        {
+          id: 8,
+          s: 0,
+          tag: "Implement",
+          text: "Implement a complete training loop for a two-layer MLP on a synthetic regression dataset, using SGD with momentum, including zero_grad(), forward pass, loss computation, .backward(), and optimizer step — all from scratch with no high-level wrappers.",
+        },
+        {
+          id: 9,
+          s: 0,
+          tag: "Implement",
+          text: "Write a full model checkpointing function that saves model state_dict, optimizer state_dict, current epoch, loss, and a random seed state to disk, and a corresponding restore function that resumes training exactly from that point.",
+        },
+        {
+          id: 10,
+          s: 0,
+          tag: "Explain Behavior",
+          text: "Explain PyTorch's computation graph lifecycle: when is a graph created, when is it freed, and what are the implications for memory management in a training loop that calls .backward() inside torch.no_grad()?",
+        },
+        {
+          id: 11,
+          s: 0,
+          tag: "Implement",
+          text: "Implement a custom autograd.Function for the SiLU (Sigmoid Linear Unit) activation, writing both the forward and backward static methods manually, including the analytic gradient formula.",
+        },
+        {
+          id: 12,
+          s: 0,
+          tag: "Implement",
+          text: "Implement a register_forward_hook that captures intermediate feature maps from every Conv2d layer in a given model, stores them in a dictionary keyed by layer name, and can be cleanly removed after a single forward pass.",
+        },
+        {
+          id: 13,
+          s: 0,
+          tag: "Implement",
+          text: "Implement a register_backward_hook that detects exploding gradients in any nn.Linear layer during backpropagation and logs the layer name and gradient norm when the norm exceeds a threshold.",
+        },
+        {
+          id: 14,
+          s: 0,
+          tag: "Implement",
+          text: "Implement a custom Dataset and DataLoader pipeline for a large image directory that does not fit in RAM, applying random crop, horizontal flip, and normalization transforms, with num_workers=4 and pin_memory=True.",
+        },
+        {
+          id: 15,
+          s: 0,
+          tag: "Implement",
+          text: "Write a custom collate_fn for a DataLoader that handles variable-length text sequences — padding them to the length of the longest sequence in the batch and returning both the padded tensor and a mask tensor.",
+        },
+        {
+          id: 16,
+          s: 0,
+          tag: "Implement",
+          text: "Implement a mixed precision training loop using torch.cuda.amp.autocast and GradScaler for a CNN classifier, including the scaler.scale(), scaler.step(), and scaler.update() calls in the correct order.",
+        },
+        {
+          id: 17,
+          s: 0,
+          tag: "Explain Behavior",
+          text: "Explain what GradScaler does under the hood in mixed precision training. What problem does it solve, how does it detect inf/nan gradients, and what does it do when an overflow is detected?",
+        },
+        {
+          id: 18,
+          s: 0,
+          tag: "Implement",
+          text: "Implement a function that moves a model and all its tensors to a target device, handles both CPU and CUDA targets, and verifies that every parameter and buffer is on the correct device afterward.",
+        },
+        {
+          id: 19,
+          s: 0,
+          tag: "Theory",
+          text: "Explain the difference between leaf tensors and non-leaf tensors in PyTorch's autograd system. Which tensors accumulate gradients in .grad, and why do non-leaf tensor gradients get freed by default after .backward()?",
+        },
+        {
+          id: 20,
+          s: 0,
+          tag: "Implement",
+          text: "Implement a gradient accumulation training loop that simulates a batch size of 512 using micro-batches of 32, accumulating gradients over 16 steps before calling optimizer.step() and zero_grad().",
+        },
+        {
+          id: 21,
+          s: 0,
+          tag: "Implement",
+          text: "Write a function that inspects a given nn.Module and prints a tree-structured summary of all submodules, their parameter counts, and total trainable versus frozen parameters.",
+        },
+        {
+          id: 22,
+          s: 0,
+          tag: "Implement",
+          text: "Implement a parameter freezing utility that accepts a model and a list of layer name prefixes, freezes all matching parameters by setting requires_grad=False, and confirms the freeze by checking optimizer parameter groups.",
+        },
+        {
+          id: 23,
+          s: 0,
+          tag: "Implement",
+          text: "Implement a custom learning rate scheduler as a subclass of torch.optim.lr_scheduler._LRScheduler that implements linear warmup for N steps followed by cosine annealing for the remainder of training.",
+        },
+        {
+          id: 24,
+          s: 0,
+          tag: "Implement",
+          text: "Implement a torch.nn.functional-based forward pass for a two-layer network that uses F.linear, F.relu, and F.dropout, and explain when you would prefer this style over defining submodules in __init__.",
+        },
+        {
+          id: 25,
+          s: 0,
+          tag: "Implement",
+          text: "Implement gradient clipping both by value and by global norm using torch.nn.utils.clip_grad_value_ and torch.nn.utils.clip_grad_norm_, and explain the difference in behavior.",
+        },
+        {
+          id: 26,
+          s: 0,
+          tag: "Implement",
+          text: "Write a utility that profiles a model's forward pass using torch.profiler, captures CPU and GPU activity, and prints the top 10 most time-consuming operations with their durations.",
+        },
+        {
+          id: 27,
+          s: 0,
+          tag: "Implement",
+          text: "Implement a function that exports a PyTorch model to ONNX format, runs inference using onnxruntime, and numerically verifies that the ONNX outputs match the PyTorch model outputs within 1e-5.",
+        },
+        {
+          id: 28,
+          s: 0,
+          tag: "Explain Behavior",
+          text: "Explain the difference between torch.jit.trace and torch.jit.script. What class of models can each handle, and what are the failure modes of tracing with dynamic control flow or data-dependent shapes?",
+        },
+        {
+          id: 29,
+          s: 0,
+          tag: "Implement",
+          text: "Implement a register_buffer example in an nn.Module for a running mean used in a custom normalization layer, and explain why register_buffer is preferable to a plain self attribute for tensors that are part of the model state but not parameters.",
+        },
+        {
+          id: 30,
+          s: 0,
+          tag: "Implement",
+          text: "Implement a custom nn.Module that wraps any existing module and adds L2 weight regularization to the forward pass output, returning both the main loss component and the regularization term separately.",
+        },
+        {
+          id: 31,
+          s: 0,
+          tag: "Debug / Diagnose",
+          text: "You call loss.backward() and receive RuntimeError: Trying to backward through the graph a second time. Describe every possible cause for this error and how you would diagnose and fix each.",
+        },
+        {
+          id: 32,
+          s: 0,
+          tag: "Debug / Diagnose",
+          text: "Your model produces identical outputs for every input in the batch after training for several epochs. Walk through all possible causes — from weight initialization to data pipeline issues — and how you would isolate each.",
+        },
+        {
+          id: 33,
+          s: 0,
+          tag: "Implement",
+          text: "Implement a complete experiment reproducibility setup function in PyTorch that seeds Python's random module, NumPy, torch CPU, torch CUDA, and configures cuDNN deterministic mode and benchmark mode appropriately.",
+        },
+        {
+          id: 34,
+          s: 0,
+          tag: "Optimize",
+          text: "Describe five concrete techniques to reduce GPU memory usage when training a large model, without changing the model architecture. Implement at least two of them in a runnable training loop.",
+        },
+        {
+          id: 35,
+          s: 0,
+          tag: "Implement",
+          text: "Implement a function that performs TorchScript scripting on a model, saves the scripted model to disk, reloads it in a fresh Python process with no model class definition available, and runs inference.",
+        },
+        {
+          id: 36,
+          s: 0,
+          tag: "Theory",
+          text: "Explain the difference between in-place operations (e.g., tensor.add_()) and out-of-place operations in the context of autograd. When do in-place operations cause errors, and why does PyTorch prohibit them in certain situations?",
+        },
+        {
+          id: 37,
+          s: 0,
+          tag: "Implement",
+          text: "Implement a multi-GPU training setup using torch.nn.DataParallel, then implement the same setup using torch.nn.parallel.DistributedDataParallel with spawn, and benchmark forward pass throughput on both.",
+        },
+        {
+          id: 38,
+          s: 0,
+          tag: "Explain Behavior",
+          text: "Explain what happens when you call optimizer.zero_grad(set_to_none=True) versus optimizer.zero_grad(set_to_none=False). What are the memory and performance implications of each?",
+        },
+        {
+          id: 39,
+          s: 0,
+          tag: "Implement",
+          text: "Implement a second-order gradient computation in PyTorch: compute the Hessian of a scalar function f(x,y) with respect to both variables using torch.autograd.functional.hessian and verify it manually.",
+        },
+        {
+          id: 40,
+          s: 0,
+          tag: "Implement",
+          text: "Implement a custom autograd.Function for a numerically stable log-sum-exp operation, manually computing both the forward pass and the backward pass gradient.",
+        },
+        {
+          id: 41,
+          s: 0,
+          tag: "Implement",
+          text: "Implement a DataLoader that streams data from a remote source (simulated via a generator), batches it on the fly, and applies transforms — without loading the entire dataset into memory.",
+        },
+        {
+          id: 42,
+          s: 0,
+          tag: "Implement",
+          text: "Build a dynamic computation graph visualizer using graphviz that accepts any PyTorch tensor with requires_grad=True and renders the autograd graph of operations leading to that tensor.",
+        },
+        {
+          id: 43,
+          s: 0,
+          tag: "Implement",
+          text: "Implement torch.vmap-style batched Jacobian computation for a given function f: R^n → R^m, using torch.autograd.functional.jacobian, and verify the result against a numerical finite-difference approximation.",
+        },
+        {
+          id: 44,
+          s: 0,
+          tag: "Implement",
+          text: "Write a complete custom optimizer subclass in PyTorch that implements sign-SGD: update weights using only the sign of the gradient (not the magnitude), with support for weight decay.",
+        },
+        {
+          id: 45,
+          s: 0,
+          tag: "Explain Behavior",
+          text: "Explain the memory layout of a PyTorch tensor: what are strides, how does contiguity relate to strides, and why does a transposed tensor share storage with the original but have different strides?",
+        },
+        {
+          id: 46,
+          s: 0,
+          tag: "Implement",
+          text: "Implement a function that takes a model and returns its memory footprint in MB broken down by: parameters, buffers, optimizer states (for Adam), and activations for a given batch size.",
+        },
+        {
+          id: 47,
+          s: 0,
+          tag: "Implement",
+          text: "Implement activation checkpointing using torch.utils.checkpoint.checkpoint on a deep sequential model, and measure the reduction in peak memory usage compared to a standard forward pass.",
+        },
+        {
+          id: 48,
+          s: 0,
+          tag: "Debug / Diagnose",
+          text: "You are loading a saved model with load_state_dict() and receive an unexpected key error for some layers and a missing key error for others. Describe how you would diagnose the source of each mismatch and implement a robust loading strategy that handles partial state dict loading.",
+        },
+        {
+          id: 49,
+          s: 0,
+          tag: "Implement",
+          text: "Implement a learning rate finder algorithm that trains for a short period while exponentially increasing the learning rate, plots the loss-vs-LR curve, and identifies the optimal learning rate.",
+        },
+        {
+          id: 50,
+          s: 0,
+          tag: "Theory",
+          text: "Explain the difference between torch.Tensor operations executed eagerly and operations inside a torch.compile-compiled function. What graph transformations does torch.compile apply, and what are the requirements for a function to be compilable?",
+        },
+        {
+          id: 51,
+          s: 0,
+          tag: "Implement",
+          text: "Implement a function that compares inference speed and output correctness between a standard PyTorch model and its torch.compile counterpart using torch.compile(model, mode='reduce-overhead').",
+        },
+        {
+          id: 52,
+          s: 0,
+          tag: "Implement",
+          text: "Implement a full batched sparse tensor operation pipeline in PyTorch using torch.sparse_coo_tensor, perform sparse-dense matrix multiplication, and compare performance against the equivalent dense operation on a high-sparsity matrix.",
+        },
+        {
+          id: 53,
+          s: 0,
+          tag: "Implement",
+          text: "Implement a custom Dataset that applies on-the-fly data augmentation with a configurable augmentation probability, and verify statistical properties of the augmented batches over 1000 iterations.",
+        },
+        {
+          id: 54,
+          s: 0,
+          tag: "Implement",
+          text: "Write a PyTorch module that implements a numerically stable softmax using the log-sum-exp trick, and verify numerical equivalence with torch.nn.functional.softmax on both normal and extreme input values.",
+        },
+        {
+          id: 55,
+          s: 0,
+          tag: "Design",
+          text: "Design a complete PyTorch training framework from scratch that supports: automatic mixed precision, gradient accumulation, gradient clipping, learning rate scheduling, checkpointing, and early stopping — as a single reusable Trainer class.",
+        },
+
+        // SECTION 1: ANN & Feedforward Networks (35)
+        {
+          id: 56,
+          s: 1,
+          tag: "Implement",
+          text: "Implement a multi-layer perceptron from scratch using only nn.Linear and activation functions, with configurable hidden layer sizes, supporting both regression and binary classification outputs.",
+        },
+        {
+          id: 57,
+          s: 1,
+          tag: "Math / Proof",
+          text: "Derive the full backpropagation update equations for a 3-layer MLP with sigmoid activations and MSE loss. Show the chain rule applied at each layer, arriving at the weight gradient expressions.",
+        },
+        {
+          id: 58,
+          s: 1,
+          tag: "Theory",
+          text: "State and explain the Universal Approximation Theorem. What does it guarantee, what does it not guarantee, and what are its practical implications for choosing network width versus depth?",
+        },
+        {
+          id: 59,
+          s: 1,
+          tag: "Math / Proof",
+          text: "Derive the gradient of the sigmoid function σ(x) with respect to x. Then show that the gradient of the cross-entropy loss composed with the sigmoid output simplifies elegantly to (ŷ - y).",
+        },
+        {
+          id: 60,
+          s: 1,
+          tag: "Math / Proof",
+          text: "Derive the gradient of the ReLU activation function and explain why it leads to dead neurons. Then derive the LeakyReLU gradient and show how it addresses this issue.",
+        },
+        {
+          id: 61,
+          s: 1,
+          tag: "Implement",
+          text: "Implement all the following activation functions from scratch in PyTorch using only primitive operations: Sigmoid, Tanh, ReLU, LeakyReLU, ELU, GELU (Gaussian approximation), and Swish.",
+        },
+        {
+          id: 62,
+          s: 1,
+          tag: "Math / Proof",
+          text: "Derive the Xavier/Glorot weight initialization formula. Show why keeping the variance of activations constant across layers requires initializing weights as Var(W) = 2 / (n_in + n_out).",
+        },
+        {
+          id: 63,
+          s: 1,
+          tag: "Math / Proof",
+          text: "Derive the He/Kaiming initialization formula for ReLU networks. Show why the variance should be 2 / n_in for ReLU, and explain why Glorot initialization is suboptimal for deep ReLU networks.",
+        },
+        {
+          id: 64,
+          s: 1,
+          tag: "Implement",
+          text: "Implement a custom weight initialization function that applies Xavier uniform initialization to all nn.Linear layers and He normal initialization to all Conv2d layers in a given model, and verify the weight distributions using histograms.",
+        },
+        {
+          id: 65,
+          s: 1,
+          tag: "Theory",
+          text: "Explain vanishing and exploding gradients in deep networks: what causes each, how do you detect them, and enumerate all techniques used to address each problem.",
+        },
+        {
+          id: 66,
+          s: 1,
+          tag: "Implement",
+          text: "Implement Batch Normalization from scratch in PyTorch as a custom nn.Module, including running mean and variance tracking for inference mode, learnable gamma and beta parameters, and correct behavior in both train() and eval() mode.",
+        },
+        {
+          id: 67,
+          s: 1,
+          tag: "Implement",
+          text: "Implement Layer Normalization from scratch as a custom nn.Module that normalizes over the last D dimensions, with learnable scale and shift parameters, and verify it produces the same output as nn.LayerNorm on the same input.",
+        },
+        {
+          id: 68,
+          s: 1,
+          tag: "Theory",
+          text: "Compare Batch Normalization, Layer Normalization, Group Normalization, and Instance Normalization. For each, specify which dimensions are normalized, which use cases each excels at, and the failure modes of Batch Normalization at small batch sizes.",
+        },
+        {
+          id: 69,
+          s: 1,
+          tag: "Implement",
+          text: "Implement Group Normalization from scratch as a custom nn.Module supporting arbitrary group counts, and verify correctness against nn.GroupNorm on a 4D input tensor.",
+        },
+        {
+          id: 70,
+          s: 1,
+          tag: "Implement",
+          text: "Implement inverted dropout in PyTorch from scratch without using nn.Dropout, ensuring that the expected value of activations is preserved during both training and inference.",
+        },
+        {
+          id: 71,
+          s: 1,
+          tag: "Implement",
+          text: "Implement Monte Carlo Dropout for uncertainty estimation: run N stochastic forward passes with dropout enabled at inference time, compute the mean prediction and predictive uncertainty, and visualize the uncertainty on a regression task.",
+        },
+        {
+          id: 72,
+          s: 1,
+          tag: "Math / Proof",
+          text: "Prove that L2 regularization is mathematically equivalent to placing a zero-mean Gaussian prior on the weights in a maximum a posteriori (MAP) estimation framework.",
+        },
+        {
+          id: 73,
+          s: 1,
+          tag: "Math / Proof",
+          text: "Prove that L1 regularization corresponds to a Laplacian prior on the weights in MAP estimation, and explain why this prior promotes sparsity while the Gaussian prior does not.",
+        },
+        {
+          id: 74,
+          s: 1,
+          tag: "Implement",
+          text: "Implement an MLP training loop that uses early stopping with a patience parameter, monitoring validation loss, saving the best model checkpoint, and restoring the best weights at the end of training.",
+        },
+        {
+          id: 75,
+          s: 1,
+          tag: "Implement",
+          text: "Implement the CosineAnnealingLR and OneCycleLR learning rate schedulers from scratch as custom _LRScheduler subclasses, and plot the learning rate curves for a 100-epoch training run.",
+        },
+        {
+          id: 76,
+          s: 1,
+          tag: "Implement",
+          text: "Implement gradient clipping by global norm from scratch without using torch.nn.utils.clip_grad_norm_, computing the global L2 norm of all gradients and rescaling them to a maximum norm threshold.",
+        },
+        {
+          id: 77,
+          s: 1,
+          tag: "Implement",
+          text: "Implement a weight decay version of SGD from scratch that applies weight decay directly to the weights (not through the gradient), and explain why this differs from L2 regularization in adaptive optimizers.",
+        },
+        {
+          id: 78,
+          s: 1,
+          tag: "Debug / Diagnose",
+          text: "You train a deep MLP and observe that training loss decreases very slowly in the first few epochs, then suddenly accelerates. Describe all possible causes and how you would diagnose which is responsible.",
+        },
+        {
+          id: 79,
+          s: 1,
+          tag: "Theory",
+          text: "Explain the difference between saturating and non-saturating activation functions, and explain why saturating activations (sigmoid, tanh) cause problems in deep networks that non-saturating ones (ReLU) avoid.",
+        },
+        {
+          id: 80,
+          s: 1,
+          tag: "Implement",
+          text: "Implement PReLU (Parametric ReLU) from scratch as an nn.Module with a learnable slope parameter per channel, including the gradient update for the slope parameter.",
+        },
+        {
+          id: 81,
+          s: 1,
+          tag: "Implement",
+          text: "Build a configurable MLP that reads a YAML/JSON architecture spec (layer sizes, activations, dropout rates, normalization type) and dynamically constructs the network using nn.ModuleList.",
+        },
+        {
+          id: 82,
+          s: 1,
+          tag: "Implement",
+          text: "Implement a function that analyzes gradient flow in a trained or partially trained network: for each layer, compute the mean and std of weight gradients during backward, and visualize them to diagnose vanishing or exploding gradients.",
+        },
+        {
+          id: 83,
+          s: 1,
+          tag: "Implement",
+          text: "Implement a custom MLP that uses residual (skip) connections between every two linear layers, supporting arbitrary depth and width, and verify that gradients flow more reliably than in a plain deep MLP of the same depth.",
+        },
+        {
+          id: 84,
+          s: 1,
+          tag: "Theory",
+          text: "Explain the dead neuron problem in ReLU networks, how to detect it during training, what causes it (e.g., large learning rates, poor initialization), and enumerate all mitigation strategies.",
+        },
+        {
+          id: 85,
+          s: 1,
+          tag: "Implement",
+          text: "Implement a hyperparameter search loop for an MLP that tries all combinations of learning rate, hidden size, and dropout rate from given lists, logs validation loss for each combination, and reports the best configuration.",
+        },
+        {
+          id: 86,
+          s: 1,
+          tag: "Math / Proof",
+          text: "Derive the gradient of binary cross-entropy loss with respect to the pre-sigmoid logit z, showing the full chain rule from the loss through the sigmoid to z, and demonstrate the numerical stability issue when using BCE with raw probabilities.",
+        },
+        {
+          id: 87,
+          s: 1,
+          tag: "Implement",
+          text: "Implement a deep MLP with orthogonal weight initialization and compare training dynamics (gradient norms, loss curves) against Xavier and He initialization on a 20-layer network.",
+        },
+        {
+          id: 88,
+          s: 1,
+          tag: "Design",
+          text: "Design a training pipeline for a tabular dataset with mixed continuous and categorical features: implement feature-specific embeddings for categoricals, normalization for numerics, a configurable MLP, and evaluation metrics appropriate for regression and classification.",
+        },
+        {
+          id: 89,
+          s: 1,
+          tag: "Implement",
+          text: "Implement a numerically stable version of the log-softmax function from scratch and verify it produces the same output as F.log_softmax on inputs with very large and very small values.",
+        },
+        {
+          id: 90,
+          s: 1,
+          tag: "Implement",
+          text: "Implement a complete training loop with a StepLR, ReduceLROnPlateau, and CyclicLR scheduler, running each for the same number of epochs on the same model, and compare final validation accuracy and training stability.",
+        },
+
+        // SECTION 2: CNNs (30)
+        {
+          id: 91,
+          s: 2,
+          tag: "Math / Proof",
+          text: "Derive the formula for the output size of a convolutional layer given input size H, kernel size K, stride S, and padding P. Extend this to dilated convolutions with dilation rate D.",
+        },
+        {
+          id: 92,
+          s: 2,
+          tag: "Math / Proof",
+          text: "Derive the receptive field size of a neuron in the final layer of a deep CNN with L layers, each with kernel size K and stride S. Show how increasing depth grows the receptive field without increasing parameters quadratically.",
+        },
+        {
+          id: 93,
+          s: 2,
+          tag: "Implement",
+          text: "Implement a 2D convolution from scratch in PyTorch using only tensor operations (no F.conv2d), supporting stride and padding, and verify the output matches F.conv2d on the same input and weights.",
+        },
+        {
+          id: 94,
+          s: 2,
+          tag: "Implement",
+          text: "Implement a complete LeNet-5 architecture from scratch in PyTorch, including the exact original architecture (average pooling, tanh activations, fully connected output), and train it on MNIST.",
+        },
+        {
+          id: 95,
+          s: 2,
+          tag: "Implement",
+          text: "Implement a VGG-16 architecture from scratch in PyTorch, using a config-driven approach that constructs the layers from a list of channel sizes and 'M' pooling markers, matching the original paper's architecture.",
+        },
+        {
+          id: 96,
+          s: 2,
+          tag: "Implement",
+          text: "Implement a ResNet-50 architecture from scratch in PyTorch, including both the basic block (for ResNet-18/34) and the bottleneck block (for ResNet-50/101/152), with correct projection shortcuts for dimension changes.",
+        },
+        {
+          id: 97,
+          s: 2,
+          tag: "Implement",
+          text: "Implement a DenseNet block from scratch in PyTorch: a dense block where each layer receives the concatenation of feature maps from all preceding layers, followed by a transition block with 1x1 conv and average pooling.",
+        },
+        {
+          id: 98,
+          s: 2,
+          tag: "Implement",
+          text: "Implement depthwise separable convolutions from scratch — first a depthwise convolution (one filter per input channel, groups=in_channels) followed by a 1x1 pointwise convolution — and compute the parameter count reduction compared to a standard convolution.",
+        },
+        {
+          id: 99,
+          s: 2,
+          tag: "Implement",
+          text: "Implement a transposed convolution (deconvolution) from scratch using only F.conv_transpose2d or basic tensor operations, verify the output shape formula, and explain when it produces checkerboard artifacts.",
+        },
+        {
+          id: 100,
+          s: 2,
+          tag: "Theory",
+          text: "Explain why 1x1 convolutions are powerful in network design. Describe their roles in dimensionality reduction, cross-channel information mixing, and computational efficiency in Inception and ResNet architectures.",
+        },
+        {
+          id: 101,
+          s: 2,
+          tag: "Implement",
+          text: "Implement the Inception module (Inception v1) from scratch in PyTorch, including the parallel branches with 1x1, 3x3, 5x5 convolutions and max pooling, and concatenation along the channel dimension.",
+        },
+        {
+          id: 102,
+          s: 2,
+          tag: "Implement",
+          text: "Implement Grad-CAM from scratch in PyTorch using forward and backward hooks, without modifying the model architecture, and produce a class activation map for a given image and predicted class.",
+        },
+        {
+          id: 103,
+          s: 2,
+          tag: "Implement",
+          text: "Implement global average pooling from scratch and explain why it is preferred over flattening followed by fully connected layers in modern CNNs for classification tasks, in terms of parameter count and spatial invariance.",
+        },
+        {
+          id: 104,
+          s: 2,
+          tag: "Implement",
+          text: "Implement a complete transfer learning pipeline in PyTorch: load a pretrained ResNet-50, freeze all layers except the final classifier, replace the classification head for a custom number of classes, and fine-tune on a small dataset.",
+        },
+        {
+          id: 105,
+          s: 2,
+          tag: "Implement",
+          text: "Implement feature extraction using a pretrained CNN: extract feature maps from multiple intermediate layers of VGG-16 for a given image, without re-running the forward pass multiple times.",
+        },
+        {
+          id: 106,
+          s: 2,
+          tag: "Implement",
+          text: "Build a data augmentation pipeline in PyTorch using torchvision.transforms that applies: random resized crop, horizontal flip, color jitter, Gaussian blur, and normalization, and visualize augmented samples from the same image.",
+        },
+        {
+          id: 107,
+          s: 2,
+          tag: "Implement",
+          text: "Implement dilated (atrous) convolutions in PyTorch and use them to build a simple semantic segmentation head where increasing dilation rates are used to capture multi-scale context without pooling.",
+        },
+        {
+          id: 108,
+          s: 2,
+          tag: "Implement",
+          text: "Implement an EfficientNet compound scaling strategy: given a base model, apply depth, width, and resolution scaling factors and construct the scaled architecture programmatically.",
+        },
+        {
+          id: 109,
+          s: 2,
+          tag: "Theory",
+          text: "Explain the role of residual/skip connections in deep networks: why do they solve the degradation problem, how do they allow gradient flow, and why does adding identity shortcuts help even when the residual function approximates zero?",
+        },
+        {
+          id: 110,
+          s: 2,
+          tag: "Implement",
+          text: "Implement a CNN-based feature pyramid network (FPN) in PyTorch with a top-down pathway and lateral connections, and explain how it enables detection at multiple scales.",
+        },
+        {
+          id: 111,
+          s: 2,
+          tag: "Debug / Diagnose",
+          text: "You are training a ResNet on image classification and observe that training accuracy saturates at ~55% while validation accuracy is at ~52%, with the loss barely decreasing. Enumerate all possible causes from data pipeline issues to architecture choices, and how you would diagnose each.",
+        },
+        {
+          id: 112,
+          s: 2,
+          tag: "Implement",
+          text: "Implement a max pooling layer from scratch using only unfold and max operations over local windows, verify it matches F.max_pool2d, and implement its gradient computation manually.",
+        },
+        {
+          id: 113,
+          s: 2,
+          tag: "Implement",
+          text: "Implement a complete image classifier in PyTorch that uses squeeze-and-excitation (SE) blocks to recalibrate channel-wise feature responses, inserted into a ResNet backbone.",
+        },
+        {
+          id: 114,
+          s: 2,
+          tag: "Implement",
+          text: "Write a function that visualizes the learned filters of the first convolutional layer of a trained CNN, normalizes them for display, and discusses what features they have learned to detect.",
+        },
+        {
+          id: 115,
+          s: 2,
+          tag: "Implement",
+          text: "Implement a U-Net architecture from scratch in PyTorch for binary image segmentation, including the contracting path (encoder), bottleneck, and expanding path (decoder) with skip connections.",
+        },
+        {
+          id: 116,
+          s: 2,
+          tag: "Optimize",
+          text: "Describe and implement at least three techniques to speed up CNN inference in PyTorch without retraining the model: quantization, kernel fusion, and model compilation. Benchmark each on a standard ResNet-50.",
+        },
+        {
+          id: 117,
+          s: 2,
+          tag: "Implement",
+          text: "Implement a CutMix data augmentation technique from scratch: randomly cut a patch from one image and paste it onto another, and blend the target labels proportionally to the patch area.",
+        },
+        {
+          id: 118,
+          s: 2,
+          tag: "Implement",
+          text: "Implement class activation mapping (CAM) for a network that uses global average pooling before the final linear layer, and generate visualizations showing which image regions are most influential for each class prediction.",
+        },
+        {
+          id: 119,
+          s: 2,
+          tag: "Comparison",
+          text: "Compare max pooling, average pooling, global average pooling, and adaptive pooling in terms of their effects on translation invariance, feature retention, and spatial information loss. When would each be preferred?",
+        },
+        {
+          id: 120,
+          s: 2,
+          tag: "Implement",
+          text: "Implement a complete CNN training pipeline with cyclic learning rate scheduling, label smoothing in the loss function, and mixup data augmentation, and report test set accuracy after convergence.",
+        },
+
+        // SECTION 3: RNNs (25)
+        {
+          id: 121,
+          s: 3,
+          tag: "Implement",
+          text: "Implement a vanilla RNN cell from scratch in PyTorch using only nn.Linear layers, with tanh activation, and build a multi-step sequence processing loop without using nn.RNN or nn.RNNCell.",
+        },
+        {
+          id: 122,
+          s: 3,
+          tag: "Math / Proof",
+          text: "Derive the full backpropagation-through-time (BPTT) equations for a vanilla RNN. Show analytically why the gradient of the loss with respect to an early hidden state involves a product of Jacobians, and prove that this leads to vanishing gradients when the spectral radius of the recurrent weight matrix is less than 1.",
+        },
+        {
+          id: 123,
+          s: 3,
+          tag: "Implement",
+          text: "Implement a full LSTM cell from scratch using only nn.Linear and activation functions, with the correct forget, input, cell, and output gate computations, without using nn.LSTM or nn.LSTMCell.",
+        },
+        {
+          id: 124,
+          s: 3,
+          tag: "Math / Proof",
+          text: "Write out the full mathematical formulation of the LSTM: all four gate equations, the cell state update, and the hidden state output. Then explain geometrically and algebraically how the cell state enables gradients to flow without vanishing over long sequences.",
+        },
+        {
+          id: 125,
+          s: 3,
+          tag: "Implement",
+          text: "Implement a GRU cell from scratch using only linear layers and activation functions, without using nn.GRU or nn.GRUCell, including the reset and update gate computations.",
+        },
+        {
+          id: 126,
+          s: 3,
+          tag: "Implement",
+          text: "Implement a bidirectional LSTM in PyTorch from scratch by running two LSTM cells — one over the sequence in forward order and one in reverse — and concatenating their hidden states at each timestep.",
+        },
+        {
+          id: 127,
+          s: 3,
+          tag: "Implement",
+          text: "Implement a stacked (multi-layer) LSTM from scratch where each layer's output sequence serves as the input to the next layer, supporting configurable depth and dropout between layers.",
+        },
+        {
+          id: 128,
+          s: 3,
+          tag: "Implement",
+          text: "Implement a sequence-to-sequence model with an LSTM encoder and decoder in PyTorch, with teacher forcing during training. The decoder should produce outputs one token at a time conditioned on the encoder's final hidden state.",
+        },
+        {
+          id: 129,
+          s: 3,
+          tag: "Implement",
+          text: "Implement a sequence-to-sequence model with Bahdanau (additive) attention from scratch, including the attention score computation, softmax weighting, and context vector construction.",
+        },
+        {
+          id: 130,
+          s: 3,
+          tag: "Implement",
+          text: "Implement packed sequence handling using pack_padded_sequence and pad_packed_sequence for a variable-length input batch, feeding it through an LSTM, and extracting the final hidden state of each sequence correctly.",
+        },
+        {
+          id: 131,
+          s: 3,
+          tag: "Theory",
+          text: "Explain teacher forcing in sequence-to-sequence training: what it is, why it speeds up training, and what exposure bias problem it introduces during inference. Describe scheduled sampling as a mitigation strategy.",
+        },
+        {
+          id: 132,
+          s: 3,
+          tag: "Implement",
+          text: "Implement an RNN-based language model that takes a sequence of token IDs, passes them through an embedding layer and an LSTM, and produces next-token logit predictions — then sample text autoregressively from it.",
+        },
+        {
+          id: 133,
+          s: 3,
+          tag: "Debug / Diagnose",
+          text: "You train an LSTM on a long-sequence task and observe that the validation loss stops decreasing after 5 epochs, despite training loss continuing to fall. Describe all possible causes and how you would diagnose and address each.",
+        },
+        {
+          id: 134,
+          s: 3,
+          tag: "Implement",
+          text: "Implement gradient clipping for an RNN training loop and demonstrate with a plot how unclipped gradients explode over long sequences while clipped gradients remain stable.",
+        },
+        {
+          id: 135,
+          s: 3,
+          tag: "Comparison",
+          text: "Compare LSTM, GRU, and vanilla RNN in terms of parameter count, trainability on long sequences, computational cost, and typical performance on sequence modeling tasks. When would you prefer GRU over LSTM?",
+        },
+        {
+          id: 136,
+          s: 3,
+          tag: "Implement",
+          text: "Implement a character-level LSTM language model that generates text, including the full training loop with cross-entropy loss and inference with temperature-controlled sampling.",
+        },
+        {
+          id: 137,
+          s: 3,
+          tag: "Implement",
+          text: "Implement truncated BPTT (backpropagation through time with truncation) for training an LSTM on very long sequences, detaching the hidden state at fixed intervals to limit gradient propagation depth.",
+        },
+        {
+          id: 138,
+          s: 3,
+          tag: "Implement",
+          text: "Implement an RNN-based time series forecasting model in PyTorch, including multi-step ahead prediction with recursive inference (each prediction fed as input to the next step).",
+        },
+        {
+          id: 139,
+          s: 3,
+          tag: "Math / Proof",
+          text: "Derive the GRU update equations and show how the update gate in GRU plays an analogous role to the combination of forget and input gates in LSTM, but with fewer parameters.",
+        },
+        {
+          id: 140,
+          s: 3,
+          tag: "Implement",
+          text: "Implement beam search decoding for a sequence-to-sequence model with beam width k, maintaining k candidate sequences at each step and returning the highest-probability complete sequence.",
+        },
+        {
+          id: 141,
+          s: 3,
+          tag: "Implement",
+          text: "Build a named entity recognition (NER) model using a bidirectional LSTM followed by a CRF (Conditional Random Field) output layer, implementing Viterbi decoding for inference.",
+        },
+        {
+          id: 142,
+          s: 3,
+          tag: "Optimize",
+          text: "Describe how to make LSTM inference faster in PyTorch using cuDNN-optimized implementations, quantization, and sequence packing. Implement at least two of these optimizations and benchmark the speedup.",
+        },
+        {
+          id: 143,
+          s: 3,
+          tag: "Implement",
+          text: "Implement zoneout regularization for an LSTM as a dropout variant that randomly preserves cell and hidden states from the previous timestep instead of zeroing them.",
+        },
+        {
+          id: 144,
+          s: 3,
+          tag: "Implement",
+          text: "Build a sequence classifier using a bidirectional GRU where the final classification is based on the concatenated forward and backward final hidden states, with attention pooling over all timestep outputs.",
+        },
+        {
+          id: 145,
+          s: 3,
+          tag: "Theory",
+          text: "Explain the vanishing gradient problem as it applies specifically to RNNs, how it differs from the vanishing gradient problem in feedforward networks, and why depth in time is fundamentally harder than depth in space.",
+        },
+
+        // SECTION 4: Attention & Transformers (40)
+        {
+          id: 146,
+          s: 4,
+          tag: "Math / Proof",
+          text: "Derive the scaled dot-product attention formula from first principles. Explain geometrically why scaling by 1/√d_k prevents the dot products from entering the saturation region of softmax, and prove this using variance analysis.",
+        },
+        {
+          id: 147,
+          s: 4,
+          tag: "Implement",
+          text: "Implement scaled dot-product attention from scratch in PyTorch, including support for an optional boolean or float attention mask, dropout on attention weights, and both batched and unbatched inputs.",
+        },
+        {
+          id: 148,
+          s: 4,
+          tag: "Implement",
+          text: "Implement multi-head self-attention from scratch in PyTorch without using nn.MultiheadAttention, supporting both batch_first=True and batch_first=False, including correct projection of Q, K, V and concatenation of heads.",
+        },
+        {
+          id: 149,
+          s: 4,
+          tag: "Implement",
+          text: "Implement sinusoidal positional encoding from scratch in PyTorch as an nn.Module, using the exact formulas from 'Attention Is All You Need', and visualize the resulting embeddings as a heatmap.",
+        },
+        {
+          id: 150,
+          s: 4,
+          tag: "Implement",
+          text: "Implement learnable positional embeddings as an nn.Embedding layer in PyTorch, and explain when learned embeddings are preferred over sinusoidal fixed embeddings.",
+        },
+        {
+          id: 151,
+          s: 4,
+          tag: "Implement",
+          text: "Implement a complete Transformer encoder block from scratch, including multi-head self-attention, a position-wise feedforward network (FFN), residual connections, and pre-LayerNorm ordering.",
+        },
+        {
+          id: 152,
+          s: 4,
+          tag: "Implement",
+          text: "Implement a complete Transformer decoder block from scratch, including masked self-attention, cross-attention over encoder outputs, and a position-wise FFN — all with pre-LayerNorm and residual connections.",
+        },
+        {
+          id: 153,
+          s: 4,
+          tag: "Implement",
+          text: "Implement causal (autoregressive) masking for a Transformer decoder from scratch: generate the appropriate upper-triangular boolean mask and apply it correctly inside scaled dot-product attention.",
+        },
+        {
+          id: 154,
+          s: 4,
+          tag: "Implement",
+          text: "Implement a complete GPT-style autoregressive Transformer language model from scratch, including token embeddings, positional embeddings, N stacked decoder blocks with causal self-attention, and a language modeling head.",
+        },
+        {
+          id: 155,
+          s: 4,
+          tag: "Implement",
+          text: "Implement a Vision Transformer (ViT) from scratch in PyTorch, including the patch embedding layer, CLS token, positional embeddings added to patch tokens, stacked Transformer encoder blocks, and a classification head on the CLS token.",
+        },
+        {
+          id: 156,
+          s: 4,
+          tag: "Theory",
+          text: "Explain the difference between self-attention, cross-attention, and causal (masked) self-attention. Describe exactly which queries, keys, and values each uses, and which use cases each is suited for.",
+        },
+        {
+          id: 157,
+          s: 4,
+          tag: "Theory",
+          text: "Explain pre-LayerNorm versus post-LayerNorm Transformer architectures. What training instability does pre-LN address, and why do modern large language models almost universally use pre-LN?",
+        },
+        {
+          id: 158,
+          s: 4,
+          tag: "Implement",
+          text: "Implement Rotary Positional Embedding (RoPE) from scratch in PyTorch and integrate it into a multi-head attention module, replacing absolute positional embeddings.",
+        },
+        {
+          id: 159,
+          s: 4,
+          tag: "Implement",
+          text: "Implement ALiBi (Attention with Linear Biases) positional encoding from scratch: compute the linear bias slopes for each attention head and add them to the attention scores before softmax.",
+        },
+        {
+          id: 160,
+          s: 4,
+          tag: "Implement",
+          text: "Implement Flash Attention's core idea — computing attention in tiles to reduce memory from O(N²) to O(N) — as a conceptual PyTorch implementation using blocked matrix multiplication, and compare its memory usage against standard attention.",
+        },
+        {
+          id: 161,
+          s: 4,
+          tag: "Implement",
+          text: "Implement grouped query attention (GQA) from scratch in PyTorch, where multiple query heads share a single key-value head, and measure the memory and speed improvement over standard multi-head attention.",
+        },
+        {
+          id: 162,
+          s: 4,
+          tag: "Implement",
+          text: "Implement multi-query attention (MQA) from scratch in PyTorch, where all query heads share a single key and a single value head, and explain its inference latency advantage.",
+        },
+        {
+          id: 163,
+          s: 4,
+          tag: "Implement",
+          text: "Implement a key-value (KV) cache for a GPT-style model: during autoregressive generation, cache the key and value tensors for all previous tokens, append only the new token's K and V at each step, avoiding recomputation.",
+        },
+        {
+          id: 164,
+          s: 4,
+          tag: "Implement",
+          text: "Implement top-k and top-p (nucleus) sampling for autoregressive text generation from a GPT model's logit outputs, including temperature scaling before sampling.",
+        },
+        {
+          id: 165,
+          s: 4,
+          tag: "Implement",
+          text: "Implement an encoder-only Transformer (BERT-style) from scratch with masked language modeling: randomly mask 15% of input tokens, run the full encoder, and predict masked tokens with a classification head.",
+        },
+        {
+          id: 166,
+          s: 4,
+          tag: "Theory",
+          text: "Explain why the Transformer replaced RNN-based sequence models for most NLP tasks. Discuss parallelism, long-range dependency modeling, computational complexity, and the role of attention scaling.",
+        },
+        {
+          id: 167,
+          s: 4,
+          tag: "Math / Proof",
+          text: "Derive the computational complexity of self-attention as O(N²·d) in both time and space, where N is sequence length and d is model dimension, and explain why this becomes a bottleneck for very long sequences.",
+        },
+        {
+          id: 168,
+          s: 4,
+          tag: "Implement",
+          text: "Implement cross-entropy language modeling training for a GPT-style model, including the shift-by-one token alignment between inputs and targets, and implement perplexity computation on a validation set.",
+        },
+        {
+          id: 169,
+          s: 4,
+          tag: "Implement",
+          text: "Implement attention weight visualization for a trained Transformer: extract and plot the attention matrices from all heads of a given layer for a given input sequence.",
+        },
+        {
+          id: 170,
+          s: 4,
+          tag: "Design",
+          text: "Design and implement a parameter-efficient Transformer for a resource-constrained device, applying techniques such as weight sharing between layers, reduced head count, reduced FFN expansion ratio, and knowledge distillation.",
+        },
+        {
+          id: 171,
+          s: 4,
+          tag: "Implement",
+          text: "Implement a sparse attention pattern (e.g., local window attention) in PyTorch as an alternative to full self-attention, where each token attends only to a fixed window of neighbors, reducing complexity to O(N·w).",
+        },
+        {
+          id: 172,
+          s: 4,
+          tag: "Math / Proof",
+          text: "Prove that the position-wise feedforward network in a Transformer (two linear layers with a non-linearity) applied independently to each position is equivalent to a 1x1 convolution applied across the sequence.",
+        },
+        {
+          id: 173,
+          s: 4,
+          tag: "Implement",
+          text: "Implement a complete seq2seq Transformer model for machine translation from scratch, including encoder, decoder, cross-attention, causal masking in the decoder, and greedy/beam search inference.",
+        },
+        {
+          id: 174,
+          s: 4,
+          tag: "Implement",
+          text: "Implement relative positional encoding in multi-head attention from scratch: add position-dependent terms to the QK dot product using relative position embeddings (as in Transformer-XL).",
+        },
+        {
+          id: 175,
+          s: 4,
+          tag: "Optimize",
+          text: "Describe and implement at least three techniques to reduce the memory footprint of a Transformer during training: gradient checkpointing on attention blocks, mixed precision, and sequence packing to eliminate padding waste.",
+        },
+        {
+          id: 176,
+          s: 4,
+          tag: "Implement",
+          text: "Implement a sliding window attention mechanism for processing sequences longer than the model's context window, dividing the sequence into overlapping windows and aggregating attention outputs.",
+        },
+        {
+          id: 177,
+          s: 4,
+          tag: "Implement",
+          text: "Implement a Transformer with register tokens (additional learnable tokens not part of the input sequence) as used in recent ViT variants, and integrate them into the patch embedding input.",
+        },
+        {
+          id: 178,
+          s: 4,
+          tag: "Implement",
+          text: "Implement the full training loop for a small GPT model on a character-level corpus, including tokenization, dataloading, mixed precision, gradient clipping, and periodic text generation samples.",
+        },
+        {
+          id: 179,
+          s: 4,
+          tag: "Theory",
+          text: "Explain the role of the CLS token in BERT-style models: how is it used for classification, what does it learn to encode during pretraining, and why is mean pooling over all tokens sometimes preferred?",
+        },
+        {
+          id: 180,
+          s: 4,
+          tag: "Implement",
+          text: "Implement a Conformer block from scratch: a convolution-augmented Transformer block that adds depthwise convolutional layers alongside attention, as used in speech recognition models.",
+        },
+        {
+          id: 181,
+          s: 4,
+          tag: "Comparison",
+          text: "Compare the original Transformer architecture with modern decoder-only LLMs (GPT-style): what components are removed, what is changed in normalization ordering, and how does the training objective differ?",
+        },
+        {
+          id: 182,
+          s: 4,
+          tag: "Implement",
+          text: "Implement a chunked cross-attention mechanism for extremely long documents: process the document in chunks, compute cross-attention from a query sequence to each chunk separately, and aggregate results.",
+        },
+        {
+          id: 183,
+          s: 4,
+          tag: "Theory",
+          text: "Explain the inductive biases of CNNs versus Transformers for vision tasks. Why do ViTs require more data than CNNs to reach competitive performance, and what architectural modifications have closed this gap?",
+        },
+        {
+          id: 184,
+          s: 4,
+          tag: "Implement",
+          text: "Implement a complete Transformer training run on the WikiText-2 language modeling benchmark from scratch: data loading with BPE tokenization, model construction, mixed precision training, validation perplexity tracking.",
+        },
+        {
+          id: 185,
+          s: 4,
+          tag: "Implement",
+          text: "Implement speculative decoding for a GPT-style model: use a smaller draft model to propose tokens and a larger target model to accept or reject them, measuring the resulting inference speedup.",
+        },
+
+        // SECTION 5: Optimization (25)
+        {
+          id: 186,
+          s: 5,
+          tag: "Math / Proof",
+          text: "Derive the SGD with momentum update rule from first principles, starting from the exponential moving average of gradients. Show that momentum accelerates convergence in directions of consistent gradient sign and dampens oscillations.",
+        },
+        {
+          id: 187,
+          s: 5,
+          tag: "Math / Proof",
+          text: "Derive the full Adam optimizer update rule from scratch, including the first moment estimate (m_t), second moment estimate (v_t), and bias correction terms (m̂_t and v̂_t). Explain why bias correction is necessary in the first few steps.",
+        },
+        {
+          id: 188,
+          s: 5,
+          tag: "Implement",
+          text: "Implement the Adam optimizer from scratch as a custom torch.optim.Optimizer subclass, correctly handling step counting, bias correction, and parameter updates, and verify it matches torch.optim.Adam on a test problem.",
+        },
+        {
+          id: 189,
+          s: 5,
+          tag: "Math / Proof",
+          text: "Explain the difference between AdamW and Adam with L2 regularization. Show mathematically that adding L2 weight decay to the Adam gradient is not equivalent to decoupled weight decay in AdamW, especially because of the adaptive scaling by v̂_t.",
+        },
+        {
+          id: 190,
+          s: 5,
+          tag: "Implement",
+          text: "Implement AdamW from scratch as a custom optimizer subclass, applying decoupled weight decay directly to the weights (not through the gradient) before the Adam update step.",
+        },
+        {
+          id: 191,
+          s: 5,
+          tag: "Implement",
+          text: "Implement RMSProp from scratch as a custom optimizer subclass and compare its convergence behavior against SGD with momentum and Adam on a noisy quadratic loss surface.",
+        },
+        {
+          id: 192,
+          s: 5,
+          tag: "Theory",
+          text: "Explain the loss landscape of deep neural networks: what is a saddle point, a local minimum, and a flat minimum? Argue why local minima are rarely a problem in practice for large over-parameterized networks.",
+        },
+        {
+          id: 193,
+          s: 5,
+          tag: "Implement",
+          text: "Implement gradient accumulation for training a model with an effective batch size of B using micro-batches of size b, including the correct normalization of gradients and optimizer step scheduling.",
+        },
+        {
+          id: 194,
+          s: 5,
+          tag: "Implement",
+          text: "Implement gradient checkpointing (activation checkpointing) from scratch using torch.utils.checkpoint.checkpoint for a chain of residual blocks, and measure the peak memory reduction versus the added computational overhead.",
+        },
+        {
+          id: 195,
+          s: 5,
+          tag: "Implement",
+          text: "Implement a learning rate warmup schedule followed by cosine decay as a custom _LRScheduler, and explain why warmup is important at the beginning of training with Adam-family optimizers.",
+        },
+        {
+          id: 196,
+          s: 5,
+          tag: "Theory",
+          text: "Explain loss scaling in mixed precision training. Why do FP16 gradients underflow, how does dynamic loss scaling detect overflow, and what is the exact sequence of operations (scale → backward → unscale → clip → step → update_scale) in GradScaler?",
+        },
+        {
+          id: 197,
+          s: 5,
+          tag: "Implement",
+          text: "Implement the Lion optimizer from scratch: a sign-based optimizer that uses only the sign of the update momentum. Compare its convergence speed and memory cost against Adam on a Transformer training task.",
+        },
+        {
+          id: 198,
+          s: 5,
+          tag: "Implement",
+          text: "Implement a simple learning rate range test (LR finder) that trains for one epoch while exponentially increasing the learning rate from a very small value to a large value, and plots the loss-vs-LR curve.",
+        },
+        {
+          id: 199,
+          s: 5,
+          tag: "Math / Proof",
+          text: "Prove that stochastic gradient descent with a constant learning rate does not converge to an exact minimum of the loss function for a non-convex function, but rather oscillates around a neighborhood of the minimum. Explain how learning rate decay addresses this.",
+        },
+        {
+          id: 200,
+          s: 5,
+          tag: "Implement",
+          text: "Implement a curriculum learning training loop where examples are sorted by difficulty (e.g., sequence length or estimated loss) and the training set is gradually expanded from easy to hard examples over epochs.",
+        },
+        {
+          id: 201,
+          s: 5,
+          tag: "Implement",
+          text: "Implement Sharpness-Aware Minimization (SAM) optimizer from scratch: compute the perturbation that maximizes loss within an epsilon ball, then update using the gradient at the perturbed weights.",
+        },
+        {
+          id: 202,
+          s: 5,
+          tag: "Theory",
+          text: "Explain why the choice of batch size affects generalization. Describe the sharp vs flat minima hypothesis: why large-batch training tends to converge to sharper minima with worse test performance, and what mitigation strategies exist.",
+        },
+        {
+          id: 203,
+          s: 5,
+          tag: "Implement",
+          text: "Implement a cosine annealing with warm restarts (SGDR) learning rate schedule, configuring T_0 (initial restart period) and T_mult (multiplier for subsequent restarts), and visualize the LR curve.",
+        },
+        {
+          id: 204,
+          s: 5,
+          tag: "Debug / Diagnose",
+          text: "You are training a transformer with Adam and observe that the loss suddenly spikes to a large value after 10,000 steps of stable training. Enumerate all possible causes — from learning rate schedule to gradient norms — and describe how you would diagnose and recover from each.",
+        },
+        {
+          id: 205,
+          s: 5,
+          tag: "Implement",
+          text: "Implement a per-parameter learning rate optimizer wrapper that allows setting different learning rates for different parameter groups (e.g., lower LR for pretrained layers, higher LR for newly initialized layers).",
+        },
+        {
+          id: 206,
+          s: 5,
+          tag: "Math / Proof",
+          text: "Derive the update rule for Nesterov Accelerated Gradient (NAG) and show geometrically why the look-ahead correction makes it converge faster than standard momentum SGD.",
+        },
+        {
+          id: 207,
+          s: 5,
+          tag: "Implement",
+          text: "Implement polynomial decay learning rate scheduling, support for step decay, and exponential decay — all as custom _LRScheduler subclasses — and compare convergence on the same training problem.",
+        },
+        {
+          id: 208,
+          s: 5,
+          tag: "Design",
+          text: "Design a memory-efficient optimizer for training a 3B parameter model on a single 40GB GPU: describe and implement strategies including optimizer state sharding, CPU offloading of optimizer states, and 8-bit quantized optimizer states.",
+        },
+        {
+          id: 209,
+          s: 5,
+          tag: "Implement",
+          text: "Implement a second-order optimization step using the diagonal approximation of the Hessian (Adagrad-style): compute the sum of squared gradients as a curvature estimate and use it to adaptively scale parameter updates.",
+        },
+        {
+          id: 210,
+          s: 5,
+          tag: "Comparison",
+          text: "Compare SGD with momentum, Adam, AdamW, and Adafactor in terms of memory cost, convergence speed on non-convex problems, generalization performance, and typical use cases in modern deep learning. When would you choose each?",
+        },
+
+        // SECTION 6: Loss Functions (20)
+        {
+          id: 211,
+          s: 6,
+          tag: "Math / Proof",
+          text: "Derive the gradient of mean squared error loss with respect to the model output ŷ. Then derive the gradient of mean absolute error loss and prove that MAE is non-differentiable at ŷ = y.",
+        },
+        {
+          id: 212,
+          s: 6,
+          tag: "Math / Proof",
+          text: "Derive the Huber loss and its gradient. Show mathematically the transition between the quadratic regime (for small errors) and the linear regime (for large errors) and prove that the transition is differentiable at the boundary.",
+        },
+        {
+          id: 213,
+          s: 6,
+          tag: "Math / Proof",
+          text: "Derive the binary cross-entropy loss from the negative log-likelihood of a Bernoulli distribution. Show that minimizing BCE is equivalent to maximizing likelihood under the Bernoulli model.",
+        },
+        {
+          id: 214,
+          s: 6,
+          tag: "Math / Proof",
+          text: "Derive categorical cross-entropy loss from the negative log-likelihood of a Multinomial distribution with softmax outputs. Show that the gradient of this loss with respect to the pre-softmax logits simplifies to (p - y), where p is the softmax probability.",
+        },
+        {
+          id: 215,
+          s: 6,
+          tag: "Implement",
+          text: "Implement the focal loss function from scratch in PyTorch for imbalanced classification: FL(p_t) = -α_t · (1 - p_t)^γ · log(p_t). Support class weighting and verify it reduces to cross-entropy when γ=0.",
+        },
+        {
+          id: 216,
+          s: 6,
+          tag: "Math / Proof",
+          text: "Derive the focal loss and explain why the modulating factor (1 - p_t)^γ down-weights easy examples and focuses training on hard examples. Show the gradient and explain why it does not vanish for hard examples.",
+        },
+        {
+          id: 217,
+          s: 6,
+          tag: "Implement",
+          text: "Implement triplet loss from scratch in PyTorch: given anchor, positive, and negative embeddings, compute the loss max(0, d(a,p) - d(a,n) + margin), and implement online hard triplet mining over a batch.",
+        },
+        {
+          id: 218,
+          s: 6,
+          tag: "Implement",
+          text: "Implement NT-Xent (Normalized Temperature-scaled Cross Entropy) loss used in SimCLR contrastive learning, including the temperature scaling and the contrastive objective over augmented pairs in a batch.",
+        },
+        {
+          id: 219,
+          s: 6,
+          tag: "Math / Proof",
+          text: "Derive the KL divergence from first principles as D_KL(P||Q) = Σ P(x) log(P(x)/Q(x)). Show its non-symmetry, explain why it is non-negative, and demonstrate that minimizing KL(q||p) leads to mean-seeking behavior while minimizing KL(p||q) leads to mode-seeking behavior.",
+        },
+        {
+          id: 220,
+          s: 6,
+          tag: "Math / Proof",
+          text: "Derive the full ELBO (Evidence Lower BOund) for a Variational Autoencoder from the log-evidence log p(x), showing how it decomposes into a reconstruction term and a KL divergence regularization term.",
+        },
+        {
+          id: 221,
+          s: 6,
+          tag: "Implement",
+          text: "Implement the VAE loss (ELBO) from scratch in PyTorch: the reconstruction loss using binary cross-entropy and the KL divergence between the encoder's Gaussian distribution and the standard normal prior N(0, I).",
+        },
+        {
+          id: 222,
+          s: 6,
+          tag: "Implement",
+          text: "Implement label smoothing cross-entropy loss from scratch in PyTorch, distributing a fraction ε of the probability mass uniformly across all classes, and show its regularization effect on overconfident predictions.",
+        },
+        {
+          id: 223,
+          s: 6,
+          tag: "Implement",
+          text: "Implement a custom PyTorch loss function for ordinal regression that respects the ordering of classes, using cumulative logits and a monotone output constraint.",
+        },
+        {
+          id: 224,
+          s: 6,
+          tag: "Implement",
+          text: "Implement contrastive loss (Siamese loss) from scratch: given pairs of embeddings and a binary label (same/different class), compute L = y·d² + (1-y)·max(0, margin - d)², and integrate it into a Siamese network training loop.",
+        },
+        {
+          id: 225,
+          s: 6,
+          tag: "Implement",
+          text: "Implement a numerically stable version of cross-entropy loss that accepts raw logits (not softmax probabilities) and uses the log-sum-exp trick to avoid overflow and underflow.",
+        },
+        {
+          id: 226,
+          s: 6,
+          tag: "Implement",
+          text: "Implement the Dice loss for binary segmentation from scratch in PyTorch, including a smooth factor to prevent division by zero, and combine it with binary cross-entropy into a combined segmentation loss.",
+        },
+        {
+          id: 227,
+          s: 6,
+          tag: "Implement",
+          text: "Implement a multi-task loss that combines a regression MSE loss and a classification cross-entropy loss with learnable log-uncertainty weights (Kendall-style) that are automatically tuned during training.",
+        },
+        {
+          id: 228,
+          s: 6,
+          tag: "Implement",
+          text: "Implement hinge loss and squared hinge loss from scratch for a binary SVM-style classifier, and compare the gradient behavior of hinge loss versus cross-entropy loss near the decision boundary.",
+        },
+        {
+          id: 229,
+          s: 6,
+          tag: "Comparison",
+          text: "Compare MSE, MAE, and Huber loss for regression tasks: how does each behave in the presence of outliers, what are the gradient properties of each, and when would you choose each in a real-world regression pipeline?",
+        },
+        {
+          id: 230,
+          s: 6,
+          tag: "Implement",
+          text: "Implement the InfoNCE (Noise Contrastive Estimation) loss used in CLIP-style contrastive multimodal learning, supporting arbitrary batch sizes and embedding dimensions, with temperature scaling.",
+        },
+
+        // SECTION 7: Training Techniques (25)
+        {
+          id: 231,
+          s: 7,
+          tag: "Debug / Diagnose",
+          text: "You are training a deep ResNet and the loss becomes NaN after epoch 3. Walk through every possible cause — from learning rate to loss function to data pipeline — and describe how you would systematically diagnose and fix each.",
+        },
+        {
+          id: 232,
+          s: 7,
+          tag: "Implement",
+          text: "Implement a training loop that logs gradient norms for every layer after every backward pass, writes them to a TensorBoard-compatible log, and uses this information to diagnose gradient flow issues in a deep network.",
+        },
+        {
+          id: 233,
+          s: 7,
+          tag: "Implement",
+          text: "Implement a comprehensive overfitting diagnostic: train a model on a tiny batch (10 examples), plot training loss over epochs, and confirm it reaches near-zero loss before proceeding to debug generalization.",
+        },
+        {
+          id: 234,
+          s: 7,
+          tag: "Implement",
+          text: "Implement a complete experiment tracking setup in PyTorch that logs hyperparameters, training/validation metrics, gradient histograms, and model checkpoints using only Python logging and JSON files (no external libraries).",
+        },
+        {
+          id: 235,
+          s: 7,
+          tag: "Design",
+          text: "Design and implement a full model selection pipeline: train 5 different model architectures on the same dataset, evaluate each on a held-out validation set using 5-fold cross-validation, and select the best model with statistical significance testing.",
+        },
+        {
+          id: 236,
+          s: 7,
+          tag: "Implement",
+          text: "Implement a learning rate warmup strategy for a Transformer model: linearly increase the learning rate from 0 to peak over the first N steps, then apply cosine decay. Show that without warmup, early Adam steps can take extremely large effective learning rates.",
+        },
+        {
+          id: 237,
+          s: 7,
+          tag: "Debug / Diagnose",
+          text: "Your model's training loss decreases smoothly but the validation loss is consistently 0.5 higher and not improving. Enumerate all possible causes (overfitting, data leakage, distribution shift, augmentation mismatch) and how you would isolate each.",
+        },
+        {
+          id: 238,
+          s: 7,
+          tag: "Implement",
+          text: "Implement a training harness that supports resuming from checkpoint mid-epoch, correctly restoring the DataLoader state (using a custom DistributedSampler or stateful iterator) so no samples are repeated or skipped.",
+        },
+        {
+          id: 239,
+          s: 7,
+          tag: "Implement",
+          text: "Implement a weight averaging technique (Stochastic Weight Averaging, SWA) using torch.optim.swa_utils: collect model snapshots at multiple LR cycle minima, average their weights, and update batch norm statistics with a final forward pass.",
+        },
+        {
+          id: 240,
+          s: 7,
+          tag: "Implement",
+          text: "Implement a profiling-based optimization pass on a training loop: use torch.profiler to identify the top bottlenecks (data loading, GPU kernel launches, CPU-GPU sync), then fix at least two of them.",
+        },
+        {
+          id: 241,
+          s: 7,
+          tag: "Design",
+          text: "Design a memory-efficient training loop for a 7B parameter model on a single 24GB GPU, incorporating: gradient checkpointing, mixed precision, gradient accumulation, CPU offloading of optimizer states, and parameter efficient fine-tuning (LoRA).",
+        },
+        {
+          id: 242,
+          s: 7,
+          tag: "Implement",
+          text: "Implement a DataLoader pipeline for a dataset that does not fit in RAM: use memory-mapped files (numpy memmap), and implement asynchronous prefetching so GPU is never idle waiting for data.",
+        },
+        {
+          id: 243,
+          s: 7,
+          tag: "Implement",
+          text: "Implement a training loop that supports configurable callbacks: at minimum, support on_epoch_end, on_batch_end, on_validation_end, and use callbacks to implement learning rate logging, early stopping, and checkpoint saving.",
+        },
+        {
+          id: 244,
+          s: 7,
+          tag: "Theory",
+          text: "Explain the difference between overfitting and underfitting in terms of bias and variance. Describe the bias-variance tradeoff mathematically, and enumerate all the regularization techniques you would apply for each.",
+        },
+        {
+          id: 245,
+          s: 7,
+          tag: "Implement",
+          text: "Implement k-fold cross-validation for a PyTorch model: split the dataset into k folds, train and validate on each fold, aggregate metrics across folds, and report mean and standard deviation of validation performance.",
+        },
+        {
+          id: 246,
+          s: 7,
+          tag: "Debug / Diagnose",
+          text: "You are training a model and notice the GPU memory usage is growing every batch, eventually causing an OOM error after 100 steps. Describe all possible causes (keeping references to tensors, loss accumulation, no no_grad on validation) and how you would find and fix each.",
+        },
+        {
+          id: 247,
+          s: 7,
+          tag: "Implement",
+          text: "Implement a confusion matrix computation and per-class precision, recall, and F1 score calculation from scratch in PyTorch without using scikit-learn, and visualize the confusion matrix as a heatmap.",
+        },
+        {
+          id: 248,
+          s: 7,
+          tag: "Implement",
+          text: "Implement exponential moving average (EMA) of model weights during training: maintain a shadow copy of the model with exponentially averaged weights, and use the EMA model for evaluation at each validation step.",
+        },
+        {
+          id: 249,
+          s: 7,
+          tag: "Implement",
+          text: "Implement a temperature scaling calibration for a trained classifier: find the optimal temperature T that minimizes ECE (Expected Calibration Error) on the validation set, and plot reliability diagrams before and after calibration.",
+        },
+        {
+          id: 250,
+          s: 7,
+          tag: "Implement",
+          text: "Implement a complete AUC-ROC and precision-recall curve computation and visualization from raw model logits and binary labels, without using scikit-learn.",
+        },
+        {
+          id: 251,
+          s: 7,
+          tag: "Design",
+          text: "Design a distributed hyperparameter search system in pure PyTorch: launch multiple training jobs with different hyperparameter configurations, collect validation metrics from each, and select the best using a simple Bayesian optimization approach.",
+        },
+        {
+          id: 252,
+          s: 7,
+          tag: "Implement",
+          text: "Implement a gradient-based input saliency map: compute the gradient of the predicted class score with respect to the input image pixels, and visualize the saliency map highlighting which pixels most influence the prediction.",
+        },
+        {
+          id: 253,
+          s: 7,
+          tag: "Implement",
+          text: "Implement a knowledge distillation training loop where a smaller student model is trained to match both the hard labels and the soft probability distribution (temperature-scaled logits) of a larger teacher model.",
+        },
+        {
+          id: 254,
+          s: 7,
+          tag: "Theory",
+          text: "Explain the concept of catastrophic forgetting in neural networks. Describe three techniques to mitigate it: Elastic Weight Consolidation (EWC), Progressive Neural Networks, and Replay-based methods.",
+        },
+        {
+          id: 255,
+          s: 7,
+          tag: "Implement",
+          text: "Implement Elastic Weight Consolidation (EWC) from scratch in PyTorch: estimate the Fisher information matrix for important parameters after task 1, and add a regularization term to the loss for task 2 that penalizes changes to important parameters.",
+        },
+
+        // SECTION 8: Generative Models (20)
+        {
+          id: 256,
+          s: 8,
+          tag: "Implement",
+          text: "Implement a simple undercomplete autoencoder in PyTorch with a symmetric encoder-decoder architecture, train it on MNIST, visualize the latent space representations, and reconstruct test images.",
+        },
+        {
+          id: 257,
+          s: 8,
+          tag: "Implement",
+          text: "Implement a denoising autoencoder in PyTorch that is trained to reconstruct clean images from noisy inputs (Gaussian noise), and compare reconstruction quality versus a standard autoencoder.",
+        },
+        {
+          id: 258,
+          s: 8,
+          tag: "Implement",
+          text: "Implement a full Variational Autoencoder (VAE) in PyTorch from scratch: encoder that outputs μ and log σ², the reparameterization trick, decoder, and the combined ELBO loss (reconstruction + KL divergence).",
+        },
+        {
+          id: 259,
+          s: 8,
+          tag: "Math / Proof",
+          text: "Prove that the reparameterization trick z = μ + σ·ε (where ε ~ N(0,I)) allows gradients to flow through the stochastic sampling node in a VAE by transforming the expectation's dependence on the distribution parameters.",
+        },
+        {
+          id: 260,
+          s: 8,
+          tag: "Implement",
+          text: "Implement a conditional VAE (cVAE) in PyTorch that generates images conditioned on a class label, by concatenating the label embedding to both encoder and decoder inputs.",
+        },
+        {
+          id: 261,
+          s: 8,
+          tag: "Implement",
+          text: "Implement a GAN training loop from scratch in PyTorch: a generator network, a discriminator network, the standard minimax loss for both, alternating update steps, and periodic sample generation logging.",
+        },
+        {
+          id: 262,
+          s: 8,
+          tag: "Math / Proof",
+          text: "Derive the original GAN objective function from a game-theoretic perspective. Show that the optimal discriminator D*(x) = p_data(x) / (p_data(x) + p_g(x)), and that optimizing the generator under this optimal discriminator minimizes the Jensen-Shannon divergence between p_data and p_g.",
+        },
+        {
+          id: 263,
+          s: 8,
+          tag: "Implement",
+          text: "Implement a Wasserstein GAN (WGAN) with gradient penalty (WGAN-GP) from scratch: use the Wasserstein distance as the objective, implement weight clipping (WGAN) and the gradient penalty (WGAN-GP), and compare training stability.",
+        },
+        {
+          id: 264,
+          s: 8,
+          tag: "Implement",
+          text: "Implement a conditional GAN (cGAN) where both the generator and discriminator are conditioned on class labels via label embeddings, and generate class-specific samples.",
+        },
+        {
+          id: 265,
+          s: 8,
+          tag: "Debug / Diagnose",
+          text: "You are training a GAN and observe that the generator loss increases steadily while the discriminator loss approaches zero. Describe all possible causes of discriminator dominance and how you would rebalance the training dynamics.",
+        },
+        {
+          id: 266,
+          s: 8,
+          tag: "Implement",
+          text: "Implement a deep convolutional GAN (DCGAN) architecture from scratch: the generator uses transposed convolutions and batch normalization, the discriminator uses strided convolutions, and apply the standard DCGAN architecture guidelines.",
+        },
+        {
+          id: 267,
+          s: 8,
+          tag: "Theory",
+          text: "Explain mode collapse in GANs: what it is, why it occurs, and enumerate at least four techniques used to mitigate it (e.g., mini-batch discrimination, historical averaging, spectral normalization, Wasserstein loss).",
+        },
+        {
+          id: 268,
+          s: 8,
+          tag: "Implement",
+          text: "Implement the forward diffusion process of a Denoising Diffusion Probabilistic Model (DDPM): given a noise schedule β_1, ..., β_T, implement the closed-form noising formula q(x_t | x_0) = N(√ᾱ_t · x_0, (1-ᾱ_t)·I).",
+        },
+        {
+          id: 269,
+          s: 8,
+          tag: "Implement",
+          text: "Implement the denoising network and training objective for DDPM: a U-Net that predicts the noise ε added at timestep t, using the simplified training loss L_simple = E[‖ε - ε_θ(x_t, t)‖²].",
+        },
+        {
+          id: 270,
+          s: 8,
+          tag: "Math / Proof",
+          text: "Derive the DDPM training objective from the ELBO: show how the variational lower bound on the log-likelihood decomposes into a reconstruction term and KL divergence terms for each diffusion step, and explain why the simplified MSE objective is used.",
+        },
+        {
+          id: 271,
+          s: 8,
+          tag: "Implement",
+          text: "Implement DDPM sampling (reverse diffusion) from scratch: starting from x_T ~ N(0, I), iteratively denoise using x_{t-1} = (1/√α_t) · (x_t - (1-α_t)/√(1-ᾱ_t) · ε_θ(x_t, t)) + σ_t · z, for T to 0.",
+        },
+        {
+          id: 272,
+          s: 8,
+          tag: "Implement",
+          text: "Implement a Vector Quantized Variational Autoencoder (VQ-VAE) from scratch, including the codebook embedding lookup, straight-through gradient estimator, and commitment loss.",
+        },
+        {
+          id: 273,
+          s: 8,
+          tag: "Implement",
+          text: "Implement a flow-based generative model (RealNVP coupling layer) from scratch: implement the affine coupling layer with bijective forward/inverse transforms and exact log-likelihood computation via the change of variables formula.",
+        },
+        {
+          id: 274,
+          s: 8,
+          tag: "Theory",
+          text: "Compare VAEs, GANs, and Diffusion Models as generative model families: compare sample quality, training stability, mode coverage, inference speed, and likelihood tractability for each.",
+        },
+        {
+          id: 275,
+          s: 8,
+          tag: "Implement",
+          text: "Implement classifier-free guidance for a diffusion model: train a conditional diffusion model with random label dropout (so it can also generate unconditionally), and at inference time combine conditional and unconditional score estimates with a guidance scale.",
+        },
+
+        // SECTION 9: LLM / NLP (35)
+        {
+          id: 276,
+          s: 9,
+          tag: "Theory",
+          text: "Explain how Byte Pair Encoding (BPE) tokenization works: describe the merging algorithm, how the vocabulary is built, and why BPE offers a good balance between vocabulary size and out-of-vocabulary handling.",
+        },
+        {
+          id: 277,
+          s: 9,
+          tag: "Implement",
+          text: "Implement a simple BPE tokenizer from scratch in Python: given a corpus, iteratively merge the most frequent byte pair until the vocabulary reaches a target size, and implement encode/decode functions.",
+        },
+        {
+          id: 278,
+          s: 9,
+          tag: "Implement",
+          text: "Implement an nn.Embedding lookup layer from scratch using only nn.Linear, handle padding indices correctly so their gradients are zeroed, and verify the output matches nn.Embedding on the same inputs.",
+        },
+        {
+          id: 279,
+          s: 9,
+          tag: "Implement",
+          text: "Implement a pretrained word embedding initialization pipeline: load GloVe or Word2Vec embeddings, filter to your vocabulary, initialize nn.Embedding weights, and freeze/unfreeze them selectively.",
+        },
+        {
+          id: 280,
+          s: 9,
+          tag: "Implement",
+          text: "Fine-tune a pretrained HuggingFace model (e.g., BERT) using the PyTorch training loop (no Trainer API): load the model, add a classification head, implement a training loop with AdamW and linear warmup, and evaluate on a downstream task.",
+        },
+        {
+          id: 281,
+          s: 9,
+          tag: "Implement",
+          text: "Implement LoRA (Low-Rank Adaptation) from scratch as a custom nn.Module that wraps a frozen nn.Linear layer and adds trainable rank-r matrices A and B such that the output is W·x + (B·A)·x·α/r.",
+        },
+        {
+          id: 282,
+          s: 9,
+          tag: "Math / Proof",
+          text: "Derive the parameter efficiency of LoRA: given a weight matrix W ∈ R^{d×k}, show that replacing it with a low-rank update ΔW = B·A where A ∈ R^{r×k} and B ∈ R^{d×r} reduces the trainable parameter count from d·k to r·(d+k), and derive the storage savings for typical LLM layers.",
+        },
+        {
+          id: 283,
+          s: 9,
+          tag: "Implement",
+          text: "Implement a full LoRA fine-tuning pipeline for a GPT-style model: inject LoRA layers into all Q and V projection matrices in every attention block, freeze all other parameters, and fine-tune on a domain-specific dataset.",
+        },
+        {
+          id: 284,
+          s: 9,
+          tag: "Implement",
+          text: "Implement a KV cache for autoregressive Transformer inference: during generation, cache the key and value tensors for all previous tokens, append new K and V at each step, and verify the output matches running full attention from scratch.",
+        },
+        {
+          id: 285,
+          s: 9,
+          tag: "Implement",
+          text: "Implement greedy decoding, temperature sampling, top-k sampling, and top-p (nucleus) sampling for a GPT-style language model, and compare the diversity and quality of text generated by each method.",
+        },
+        {
+          id: 286,
+          s: 9,
+          tag: "Implement",
+          text: "Implement INT8 dynamic quantization on a pretrained Transformer model using torch.quantization.quantize_dynamic, measure the inference speedup and memory reduction, and evaluate the impact on text generation quality.",
+        },
+        {
+          id: 287,
+          s: 9,
+          tag: "Implement",
+          text: "Build a complete GPT-style autoregressive language model from scratch: tokenizer (character-level), embedding layer, N decoder blocks (causal attention, FFN, LayerNorm), language modeling head, cross-entropy training, and autoregressive text generation.",
+        },
+        {
+          id: 288,
+          s: 9,
+          tag: "Implement",
+          text: "Implement a BERT-style masked language modeling pretraining pipeline: randomly mask tokens, run through an encoder Transformer, and train with cross-entropy loss only on masked positions.",
+        },
+        {
+          id: 289,
+          s: 9,
+          tag: "Implement",
+          text: "Implement prefix caching for a Transformer model: precompute and cache the K and V tensors for a fixed system prompt, then reuse them across multiple completion calls to reduce inference cost.",
+        },
+        {
+          id: 290,
+          s: 9,
+          tag: "Theory",
+          text: "Explain the scaling laws for language models (Chinchilla scaling laws): how should model size and training data scale together to minimize loss for a given compute budget, and what are the key findings?",
+        },
+        {
+          id: 291,
+          s: 9,
+          tag: "Implement",
+          text: "Implement beam search decoding from scratch for a language model, supporting configurable beam width, length penalty, and early stopping when all beams produce an EOS token.",
+        },
+        {
+          id: 292,
+          s: 9,
+          tag: "Implement",
+          text: "Implement a complete RLHF reward model training pipeline in PyTorch: build a reward model from a pretrained LM, define the preference pair loss (Bradley-Terry model), and train on human preference data.",
+        },
+        {
+          id: 293,
+          s: 9,
+          tag: "Implement",
+          text: "Implement QLoRA-style 4-bit quantization for an LLM fine-tuning setup: quantize base model weights to NF4 format using bitsandbytes-compatible logic, add LoRA adapters on top, and verify that gradients flow only through the adapter parameters.",
+        },
+        {
+          id: 294,
+          s: 9,
+          tag: "Implement",
+          text: "Implement a simple chat template and conversation history management system for an instruction-tuned LLM: format user/assistant turns with special tokens, truncate history to fit within context length, and generate responses token by token.",
+        },
+        {
+          id: 295,
+          s: 9,
+          tag: "Implement",
+          text: "Implement speculative decoding from scratch: use a small draft model to propose K tokens at a time, then use a larger target model to verify them in a single forward pass, and measure the throughput improvement.",
+        },
+        {
+          id: 296,
+          s: 9,
+          tag: "Implement",
+          text: "Implement a Transformer with sliding window attention (as in Mistral/Longformer): each token attends only to a fixed window of W preceding tokens, implement the windowed attention mask and efficient causal windowed attention.",
+        },
+        {
+          id: 297,
+          s: 9,
+          tag: "Implement",
+          text: "Implement a continual pretraining pipeline for a pretrained LLM on a domain-specific corpus: implement the data mixing strategy, learning rate warmup, and EWC-style regularization to prevent catastrophic forgetting of general capabilities.",
+        },
+        {
+          id: 298,
+          s: 9,
+          tag: "Implement",
+          text: "Implement a retrieval-augmented generation (RAG) pipeline in PyTorch: given a query, retrieve top-k relevant passages from a document store using dense embeddings (DPR-style), concatenate them with the query, and generate an answer with a language model.",
+        },
+        {
+          id: 299,
+          s: 9,
+          tag: "Design",
+          text: "Design a complete LLM fine-tuning system from scratch: dataset preprocessing and tokenization, efficient batching with sequence packing, LoRA adapter injection, training with gradient accumulation and mixed precision, evaluation on held-out benchmarks, and model saving.",
+        },
+        {
+          id: 300,
+          s: 9,
+          tag: "Comparison",
+          text: "Compare full fine-tuning, adapter-based fine-tuning (LoRA), and prompt tuning / prefix tuning for adapting a pretrained LLM. Discuss parameter efficiency, performance, inference overhead, and when each approach is preferred.",
+        },
+        {
+          id: 301,
+          s: 9,
+          tag: "Implement",
+          text: "Implement a simple tokenizer for a byte-level BPE model from scratch, supporting encoding a string to token IDs and decoding token IDs back to a string, with proper handling of multi-byte UTF-8 characters.",
+        },
+        {
+          id: 302,
+          s: 9,
+          tag: "Implement",
+          text: "Implement a simple instruction-following fine-tuning (SFT) dataset format and training loop for a language model: format prompts and completions with special instruction tokens, mask the loss over the prompt tokens, and only compute loss over completion tokens.",
+        },
+        {
+          id: 303,
+          s: 9,
+          tag: "Theory",
+          text: "Explain the difference between next-token prediction pretraining (GPT-style) and masked language modeling pretraining (BERT-style). When does each excel, and what downstream tasks are each better suited for?",
+        },
+        {
+          id: 304,
+          s: 9,
+          tag: "Implement",
+          text: "Implement a DPO (Direct Preference Optimization) training loop from scratch: given chosen and rejected completions, compute the log probability ratio between the policy model and the reference model, and optimize the DPO loss.",
+        },
+        {
+          id: 305,
+          s: 9,
+          tag: "Implement",
+          text: "Implement a perplexity evaluation function for a language model: compute the log-likelihood of a held-out text corpus, average over tokens, and exponentiate to get perplexity, supporting variable-length sequences.",
+        },
+        {
+          id: 306,
+          s: 9,
+          tag: "Implement",
+          text: "Implement sequence packing for efficient LLM training: concatenate multiple short sequences into a single context window with document boundary markers, avoiding wasted compute on padding tokens.",
+        },
+        {
+          id: 307,
+          s: 9,
+          tag: "Implement",
+          text: "Implement a simple sparse mixture-of-experts (MoE) FFN layer from scratch: a router network selects the top-k experts for each token, and the final output is a weighted combination of selected expert outputs.",
+        },
+        {
+          id: 308,
+          s: 9,
+          tag: "Theory",
+          text: "Explain the attention sink phenomenon observed in LLMs during inference: why do certain initial tokens accumulate disproportionately large attention weights, and how does StreamingLLM exploit this to enable infinite-length generation without full KV cache?",
+        },
+        {
+          id: 309,
+          s: 9,
+          tag: "Implement",
+          text: "Implement PEFT (parameter-efficient fine-tuning) using IA³ (Infused Adapter by Inhibiting and Amplifying Inner Activations): inject learnable vectors that scale key, value, and FFN activations, keeping base model frozen.",
+        },
+        {
+          id: 310,
+          s: 9,
+          tag: "Implement",
+          text: "Implement a simple function-calling interface for an LLM: define a set of available tools as JSON schemas, format them into the system prompt, parse the model's structured output to detect a tool call, execute it, and pass results back for the next generation.",
+        },
+
+        // SECTION 10: Production & MLOps (40)
+        {
+          id: 311,
+          s: 10,
+          tag: "Comparison",
+          text: "Compare torch.compile, torch.jit.trace, and torch.jit.script in terms of the types of models each can handle, the optimizations each applies, and the trade-offs in compilation time, inference speed, and deployment flexibility.",
+        },
+        {
+          id: 312,
+          s: 10,
+          tag: "Implement",
+          text: "Implement a complete model serving pipeline in PyTorch: trace a model with torch.jit.trace, save it, load it in a new process, and serve predictions over HTTP using a minimal web server.",
+        },
+        {
+          id: 313,
+          s: 10,
+          tag: "Implement",
+          text: "Implement dynamic quantization on a BERT-style model using torch.quantization.quantize_dynamic, and measure inference latency and model size reduction on a text classification benchmark.",
+        },
+        {
+          id: 314,
+          s: 10,
+          tag: "Implement",
+          text: "Implement static quantization (post-training quantization) on a CNN model: insert QuantStub/DeQuantStub, calibrate using a representative dataset with torch.quantization.prepare and torch.quantization.convert, and benchmark the quantized model.",
+        },
+        {
+          id: 315,
+          s: 10,
+          tag: "Implement",
+          text: "Implement quantization-aware training (QAT) in PyTorch: insert fake quantization operations during training to simulate INT8 precision, fine-tune the model, and then convert to a fully quantized model for deployment.",
+        },
+        {
+          id: 316,
+          s: 10,
+          tag: "Theory",
+          text: "Explain the difference between dynamic quantization, static post-training quantization, and quantization-aware training. For each, describe what is quantized (weights vs activations), when calibration is needed, and the typical accuracy trade-off.",
+        },
+        {
+          id: 317,
+          s: 10,
+          tag: "Implement",
+          text: "Implement unstructured magnitude-based weight pruning using torch.nn.utils.prune.l1_unstructured, apply it to 50% of weights in each Linear layer, verify sparsity, and re-evaluate model accuracy.",
+        },
+        {
+          id: 318,
+          s: 10,
+          tag: "Implement",
+          text: "Implement structured pruning (channel pruning) for a CNN: remove channels with the lowest L1 norm, reconstruct the model architecture without the pruned channels, and evaluate the speedup on actual GPU inference.",
+        },
+        {
+          id: 319,
+          s: 10,
+          tag: "Implement",
+          text: "Implement gradual magnitude pruning: start at 0% sparsity, linearly increase to a target sparsity over N training epochs using a custom pruning schedule, and use the lottery ticket hypothesis to identify winning tickets.",
+        },
+        {
+          id: 320,
+          s: 10,
+          tag: "Implement",
+          text: "Implement a complete DataParallel training loop and a DistributedDataParallel (DDP) training loop using torch.distributed.init_process_group, and benchmark communication overhead and training throughput for both.",
+        },
+        {
+          id: 321,
+          s: 10,
+          tag: "Comparison",
+          text: "Explain the difference between DataParallel and DistributedDataParallel in PyTorch. Why is DDP preferred for multi-GPU training, how does gradient synchronization work in each, and what are the scaling limitations of DataParallel?",
+        },
+        {
+          id: 322,
+          s: 10,
+          tag: "Implement",
+          text: "Implement a DDP training loop using the NCCL backend that supports all-reduce gradient synchronization, gradient accumulation with no_sync(), and correct batch size scaling across GPUs.",
+        },
+        {
+          id: 323,
+          s: 10,
+          tag: "Design",
+          text: "Design a fully sharded data parallel (FSDP) training setup for a 13B parameter model using PyTorch FSDP: configure sharding strategy, activation checkpointing, mixed precision policy, and CPU offloading.",
+        },
+        {
+          id: 324,
+          s: 10,
+          tag: "Implement",
+          text: "Implement model parallelism by splitting a large Transformer model across two GPUs: place the first half of layers on GPU 0 and the second half on GPU 1, and implement the forward pass with explicit inter-GPU tensor transfers.",
+        },
+        {
+          id: 325,
+          s: 10,
+          tag: "Implement",
+          text: "Implement pipeline parallelism for a multi-layer model: divide layers into pipeline stages across GPUs, implement micro-batching to fill the pipeline, and manage device placement automatically.",
+        },
+        {
+          id: 326,
+          s: 10,
+          tag: "Implement",
+          text: "Implement a complete ONNX export pipeline: export a Transformer encoder to ONNX with dynamic input shapes, run inference using onnxruntime, and verify numerical correctness against PyTorch within tolerance.",
+        },
+        {
+          id: 327,
+          s: 10,
+          tag: "Implement",
+          text: "Implement a complete model benchmarking harness that measures throughput (samples/second), latency (mean, p50, p95, p99), and GPU memory usage for a given model and batch size range.",
+        },
+        {
+          id: 328,
+          s: 10,
+          tag: "Implement",
+          text: "Implement a continuous batching inference server for a language model: dynamically group incoming requests of different sequence lengths into batches, pad efficiently, and return responses with minimal latency overhead.",
+        },
+        {
+          id: 329,
+          s: 10,
+          tag: "Implement",
+          text: "Implement knowledge distillation for model compression: train a small student model to match the soft logit distributions of a large teacher model, and compare the student's performance against training from scratch.",
+        },
+        {
+          id: 330,
+          s: 10,
+          tag: "Implement",
+          text: "Implement a complete training pipeline with experiment tracking using only built-in Python tools: write metrics to JSON, implement a simple grid search over hyperparameters, and produce comparison plots of all runs.",
+        },
+        {
+          id: 331,
+          s: 10,
+          tag: "Design",
+          text: "Design an online learning system in PyTorch: a deployed model that receives a stream of labeled examples, updates its weights incrementally with a learning rate warm restart schedule, and uses a sliding window for validation without accessing the full training history.",
+        },
+        {
+          id: 332,
+          s: 10,
+          tag: "Implement",
+          text: "Implement tensor parallelism for a large nn.Linear layer: split the weight matrix across multiple GPUs along the row or column dimension, perform local matrix multiplications, and aggregate results with all-reduce or all-gather.",
+        },
+        {
+          id: 333,
+          s: 10,
+          tag: "Implement",
+          text: "Implement a complete model health monitoring system: log prediction distribution drift using KL divergence on model output logits, set up alerts when drift exceeds a threshold, and implement automatic model refresh from a checkpoint.",
+        },
+        {
+          id: 334,
+          s: 10,
+          tag: "Implement",
+          text: "Implement BitsAndBytes-style INT8 linear layer quantization from scratch: quantize weights to INT8 with a per-row scale factor, dequantize for the matrix multiply, and verify the approximation error is within acceptable bounds.",
+        },
+        {
+          id: 335,
+          s: 10,
+          tag: "Optimize",
+          text: "Design and implement a memory-efficient inference pipeline for serving a 7B parameter LLM on a 16GB GPU: describe how to use 4-bit quantization, KV cache with a max sequence budget, and output the system design with a working PyTorch implementation.",
+        },
+        {
+          id: 336,
+          s: 10,
+          tag: "Implement",
+          text: "Implement a torch.compile-based optimization pass: apply it to a Transformer model's forward pass with mode='max-autotune', profile the compilation time and inference speedup, and identify which operations benefited most.",
+        },
+        {
+          id: 337,
+          s: 10,
+          tag: "Implement",
+          text: "Implement a simple autoregressive LLM inference engine with a request queue, batching up to N requests or a timeout (whichever comes first), continuous KV cache management, and streaming token output per request.",
+        },
+        {
+          id: 338,
+          s: 10,
+          tag: "Implement",
+          text: "Implement a model versioning and A/B testing framework: register model checkpoints with metadata, serve two model versions simultaneously, split traffic by a configurable ratio, and log per-version prediction metrics.",
+        },
+        {
+          id: 339,
+          s: 10,
+          tag: "Implement",
+          text: "Implement a complete INT4 weight-only quantization pipeline for a Transformer model using GPTQ-style quantization: iteratively quantize each layer while minimizing reconstruction error using the Hessian of the layer input activations.",
+        },
+        {
+          id: 340,
+          s: 10,
+          tag: "Implement",
+          text: "Implement a multi-node distributed training job setup using PyTorch's torchrun: configure the rendezvous backend, handle process group initialization, implement fault-tolerant training with automatic checkpoint restoration on node failure.",
+        },
+        {
+          id: 341,
+          s: 10,
+          tag: "Implement",
+          text: "Implement kernel fusion manually in PyTorch by writing a single torch.compile-compatible function that fuses LayerNorm followed by a linear projection into a single optimized graph, and benchmark against the unfused version.",
+        },
+        {
+          id: 342,
+          s: 10,
+          tag: "Design",
+          text: "Design a production-grade LLM serving system: describe the architecture for handling concurrent requests, implementing efficient KV cache memory management across requests, batching strategies, and graceful degradation under high load.",
+        },
+        {
+          id: 343,
+          s: 10,
+          tag: "Implement",
+          text: "Implement activation-aware quantization: for each linear layer, collect input activation statistics, use them to calibrate quantization ranges, and compare calibration quality versus naive quantization without activation statistics.",
+        },
+        {
+          id: 344,
+          s: 10,
+          tag: "Implement",
+          text: "Implement a simple model registry in PyTorch: save models with metadata (architecture, training config, eval metrics), load models by name and version, and compare two model versions on a test set.",
+        },
+        {
+          id: 345,
+          s: 10,
+          tag: "Implement",
+          text: "Implement sparse matrix multiplication using PyTorch's sparse tensor support for a pruned model where 80%+ of weights are zero, and measure the wall-clock speedup over dense matrix multiplication.",
+        },
+        {
+          id: 346,
+          s: 10,
+          tag: "Debug / Diagnose",
+          text: "Your DDP training job produces different loss values on different runs with the same seed, and convergence is inconsistent across nodes. Enumerate all possible sources of non-determinism in distributed training and how you would track down and eliminate each.",
+        },
+        {
+          id: 347,
+          s: 10,
+          tag: "Implement",
+          text: "Implement a memory profiler for a PyTorch training loop using torch.cuda.memory_stats: track peak memory allocation, memory fragmentation, and identify which operations cause the largest memory spikes.",
+        },
+        {
+          id: 348,
+          s: 10,
+          tag: "Implement",
+          text: "Implement a model weight diff tool: given two model checkpoints (pre and post fine-tuning), compute the L2 norm of weight changes per layer, identify which layers changed most, and visualize the change distribution.",
+        },
+        {
+          id: 349,
+          s: 10,
+          tag: "Design",
+          text: "Design a complete MLOps pipeline for a deep learning project: data versioning, model training with experiment tracking, automated evaluation, model registry, staging/production deployment, monitoring for data drift, and automated retraining triggers.",
+        },
+        {
+          id: 350,
+          s: 10,
+          tag: "Implement",
+          text: "Implement a custom CUDA-extension design exercise in PyTorch using torch.utils.cpp_extension: write a simple C++ extension that implements a fused bias+ReLU operation, compile it with CppExtension, and verify correctness against a pure PyTorch implementation.",
+        },
+      ];
+
+      // State
+      let activeSection = null;
+      let activeTag = null;
+      let search = "";
+      let bookmarks = new Set(
+        JSON.parse(localStorage.getItem("ptq_bookmarks") || "[]")
+      );
+      let completed = new Set(
+        JSON.parse(localStorage.getItem("ptq_completed") || "[]")
+      );
+      let expanded = null;
+      let showBookmarks = false;
+      let showCompleted = false;
+      let currentView = "questions";
+
+      function save() {
+        localStorage.setItem("ptq_bookmarks", JSON.stringify([...bookmarks]));
+        localStorage.setItem("ptq_completed", JSON.stringify([...completed]));
+      }
+
+      function switchView(v) {
+        currentView = v;
+        document
+          .getElementById("btn-q")
+          .classList.toggle("active", v === "questions");
+        document
+          .getElementById("btn-s")
+          .classList.toggle("active", v === "stats");
+        document.getElementById("q-list").style.display =
+          v === "questions" ? "flex" : "none";
+        document.getElementById("q-count").style.display =
+          v === "questions" ? "block" : "none";
+        document.getElementById("filter-row").style.display =
+          v === "questions" ? "flex" : "none";
+        document.getElementById("stats-view").style.display =
+          v === "stats" ? "block" : "none";
+        document.getElementById("sidebar").style.display =
+          v === "questions" ? "block" : "none";
+        if (v === "stats") renderStats();
+      }
+
+      function setSection(i) {
+        activeSection = i;
+        render();
+      }
+      function setTag(t) {
+        activeTag = activeTag === t ? null : t;
+        render();
+      }
+
+      function getFiltered() {
+        return QUESTIONS.filter((q) => {
+          if (activeSection !== null && q.s !== activeSection) return false;
+          if (activeTag !== null && q.tag !== activeTag) return false;
+          if (showBookmarks && !bookmarks.has(q.id)) return false;
+          if (showCompleted && !completed.has(q.id)) return false;
+          if (search) {
+            const s = search.toLowerCase();
+            if (
+              !q.text.toLowerCase().includes(s) &&
+              !SECTIONS[q.s].toLowerCase().includes(s) &&
+              !q.tag.toLowerCase().includes(s)
+            )
+              return false;
+          }
+          return true;
+        });
+      }
+
+      function renderSidebar() {
+        // sections
+        const sl = document.getElementById("sec-list");
+        const sa = document.getElementById("sec-all");
+        sa.classList.toggle("active", activeSection === null);
+        const doneBySection = {};
+        completed.forEach((id) => {
+          const q = QUESTIONS.find((q) => q.id === id);
+          if (q) doneBySection[q.s] = (doneBySection[q.s] || 0) + 1;
+        });
+        const secCounts = {};
+        QUESTIONS.forEach((q) => {
+          secCounts[q.s] = (secCounts[q.s] || 0) + 1;
+        });
+        sl.innerHTML = "";
+        SECTIONS.forEach((s, i) => {
+          const done = doneBySection[i] || 0;
+          const btn = document.createElement("button");
+          btn.className =
+            "sidebar-btn" + (activeSection === i ? " active" : "");
+          btn.innerHTML = `<span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s}</span><span class="count">${
+            done ? `<span class="done-count">${done}/</span>` : ""
+          }${secCounts[i]}</span>`;
+          btn.onclick = () => setSection(activeSection === i ? null : i);
+          sl.appendChild(btn);
+        });
+
+        // tags
+        const tl = document.getElementById("tag-list");
+        const tagCounts = {};
+        QUESTIONS.forEach((q) => {
+          tagCounts[q.tag] = (tagCounts[q.tag] || 0) + 1;
+        });
+        tl.innerHTML = "";
+        TAGS.forEach((t) => {
+          const style = TAG_STYLE[t];
+          const btn = document.createElement("button");
+          btn.className = "sidebar-btn" + (activeTag === t ? " active" : "");
+          btn.style.cssText =
+            activeTag === t
+              ? `background:${style.bg};color:${style.color};border:1px solid ${style.border}`
+              : "";
+          btn.innerHTML = `<span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t}</span><span class="count">${tagCounts[t]}</span>`;
+          btn.onclick = () => setTag(t);
+          tl.appendChild(btn);
+        });
+      }
+
+      function renderFilters() {
+        const fr = document.getElementById("filter-row");
+        fr.innerHTML = "";
+        const bmkBtn = document.createElement("button");
+        bmkBtn.className = "chip" + (showBookmarks ? " on" : "");
+        bmkBtn.innerHTML = `🔖 Bookmarks${
+          bookmarks.size ? " (" + bookmarks.size + ")" : ""
+        }`;
+        bmkBtn.onclick = () => {
+          showBookmarks = !showBookmarks;
+          render();
+        };
+        fr.appendChild(bmkBtn);
+
+        const doneBtn = document.createElement("button");
+        doneBtn.className = "chip" + (showCompleted ? " on" : "");
+        doneBtn.innerHTML = `✓ Completed${
+          completed.size ? " (" + completed.size + ")" : ""
+        }`;
+        doneBtn.onclick = () => {
+          showCompleted = !showCompleted;
+          render();
+        };
+        fr.appendChild(doneBtn);
+
+        if (
+          activeSection !== null ||
+          activeTag !== null ||
+          showBookmarks ||
+          showCompleted ||
+          search
+        ) {
+          const clr = document.createElement("button");
+          clr.className = "chip clear";
+          clr.innerHTML = "✕ Clear all";
+          clr.onclick = () => {
+            activeSection = null;
+            activeTag = null;
+            showBookmarks = false;
+            showCompleted = false;
+            search = "";
+            document.getElementById("search").value = "";
+            render();
+          };
+          fr.appendChild(clr);
+        }
+      }
+
+      function renderProgress() {
+        const pct = ((completed.size / 350) * 100).toFixed(1);
+        document.getElementById("prog-fill").style.width = pct + "%";
+        document.getElementById(
+          "prog-label"
+        ).textContent = `${completed.size} of 350 completed`;
+        document.getElementById(
+          "bmk-label"
+        ).textContent = `${bookmarks.size} bookmarked`;
+      }
+
+      function renderQuestions() {
+        const filtered = getFiltered();
+        document.getElementById("q-count").textContent = `${
+          filtered.length
+        } question${filtered.length !== 1 ? "s" : ""}`;
+        const list = document.getElementById("q-list");
+        list.innerHTML = "";
+        filtered.forEach((q) => {
+          const isExp = expanded === q.id;
+          const isDone = completed.has(q.id);
+          const isBmk = bookmarks.has(q.id);
+          const level = getLevel(q.id);
+          const ts = TAG_STYLE[q.tag];
+
+          const card = document.createElement("div");
+          card.className = "q-card" + (isDone ? " done" : "");
+
+          const hdr = document.createElement("div");
+          hdr.className = "q-header";
+          hdr.onclick = () => {
+            expanded = isExp ? null : q.id;
+            renderQuestions();
+          };
+
+          hdr.innerHTML = `
+      <span class="q-num">${q.id}.</span>
+      <div class="q-body">
+        <div class="q-tags">
+          <span class="tag-pill" style="background:${ts.bg};color:${
+            ts.color
+          };border:1px solid ${ts.border}">${q.tag}</span>
+          <span class="sec-pill">${SECTIONS[q.s]}</span>
+          <span class="lvl-pill">${level}</span>
+        </div>
+        <p class="q-text${isExp ? " expanded" : ""}">${q.text}</p>
+      </div>
+      <div class="q-actions">
+        <button class="icon-btn bmk${
+          isBmk ? " on" : ""
+        }" title="Bookmark" onclick="event.stopPropagation();toggleBmk(${
+            q.id
+          })">${isBmk ? "🔖" : "🏷️"}</button>
+        <button class="icon-btn done-btn${
+          isDone ? " on" : ""
+        }" title="Mark complete" onclick="event.stopPropagation();toggleDone(${
+            q.id
+          })">${isDone ? "✅" : "⬜"}</button>
+      </div>
+    `;
+          card.appendChild(hdr);
+          list.appendChild(card);
+        });
+      }
+
+      function toggleBmk(id) {
+        bookmarks.has(id) ? bookmarks.delete(id) : bookmarks.add(id);
+        save();
+        render();
+      }
+      function toggleDone(id) {
+        completed.has(id) ? completed.delete(id) : completed.add(id);
+        save();
+        render();
+      }
+
+      function renderStats() {
+        const sv = document.getElementById("stats-view");
+        const secCounts = {};
+        QUESTIONS.forEach((q) => {
+          secCounts[q.s] = (secCounts[q.s] || 0) + 1;
+        });
+        const doneBySection = {};
+        completed.forEach((id) => {
+          const q = QUESTIONS.find((q) => q.id === id);
+          if (q) doneBySection[q.s] = (doneBySection[q.s] || 0) + 1;
+        });
+        const tagCounts = {};
+        QUESTIONS.forEach((q) => {
+          tagCounts[q.tag] = (tagCounts[q.tag] || 0) + 1;
+        });
+        const pct = Math.round((completed.size / 350) * 100);
+
+        sv.innerHTML = `
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-label">TOTAL</div><div class="stat-value">350</div></div>
+      <div class="stat-card"><div class="stat-label">COMPLETED</div><div class="stat-value green">${
+        completed.size
+      }</div></div>
+      <div class="stat-card"><div class="stat-label">BOOKMARKED</div><div class="stat-value">${
+        bookmarks.size
+      }</div></div>
+      <div class="stat-card"><div class="stat-label">PROGRESS</div><div class="stat-value green">${pct}%</div></div>
+    </div>
+    <div class="section-card">
+      <h3>// progress by section</h3>
+      ${SECTIONS.map((s, i) => {
+        const total = secCounts[i] || 0;
+        const done = doneBySection[i] || 0;
+        const p = total ? Math.round((done / total) * 100) : 0;
+        return `<div class="prog-row">
+          <div class="prog-label"><span class="prog-name">${s}</span><span class="prog-nums">${done}/${total}</span></div>
+          <div class="prog-track"><div class="prog-fill" style="width:${p}%"></div></div>
+        </div>`;
+      }).join("")}
+    </div>
+    <div class="tag-card">
+      <h3>// questions by type</h3>
+      ${TAGS.map((tag) => {
+        const count = tagCounts[tag] || 0;
+        const p = Math.round((count / 350) * 100);
+        return `<div class="tag-row">
+          <div style="width:10px;height:10px;border-radius:2px;background:${TAG_BAR_COLOR[tag]};flex-shrink:0"></div>
+          <span class="tag-name">${tag}</span>
+          <div class="tag-bar-track"><div class="tag-bar-fill" style="width:${p}%;background:${TAG_BAR_COLOR[tag]}"></div></div>
+          <span class="tag-num">${count}</span>
+        </div>`;
+      }).join("")}
+    </div>
+  `;
+      }
+
+      function render() {
+        renderProgress();
+        renderSidebar();
+        renderFilters();
+        renderQuestions();
+      }
+
+      document.getElementById("search").addEventListener("input", (e) => {
+        search = e.target.value;
+        render();
+      });
+
+      render();
+    </script>
+  </body>
+</html>
