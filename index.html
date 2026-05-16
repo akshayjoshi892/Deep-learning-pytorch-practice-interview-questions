@@ -51,6 +51,9 @@
         background: var(--border2);
         border-radius: 99px;
       }
+      .icon-btn.copy-btn.copied {
+        color: var(--accent);
+      }
 
       /* layout */
       .app {
@@ -311,7 +314,6 @@
         gap: 10px;
         padding: 12px 14px;
         cursor: pointer;
-        user-select: none;
       }
       .q-num {
         font-family: var(--mono);
@@ -3036,6 +3038,8 @@
         }" title="Mark complete" onclick="event.stopPropagation();toggleDone(${
             q.id
           })">${isDone ? "✅" : "⬜"}</button>
+          <button class="icon-btn copy-btn" title="Copy question" 
+  onclick="event.stopPropagation();copyQ(${q.id}, this)">📋</button>
       </div>
     `;
           card.appendChild(hdr);
@@ -3052,6 +3056,18 @@
         completed.has(id) ? completed.delete(id) : completed.add(id);
         save();
         render();
+      }
+      function copyQ(id, btn) {
+        const q = QUESTIONS.find((q) => q.id === id);
+        if (!q) return;
+        navigator.clipboard.writeText(q.text).then(() => {
+          btn.textContent = "✅";
+          btn.classList.add("copied");
+          setTimeout(() => {
+            btn.textContent = "📋";
+            btn.classList.remove("copied");
+          }, 1500);
+        });
       }
 
       function renderStats() {
