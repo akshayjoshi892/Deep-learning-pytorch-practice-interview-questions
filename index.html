@@ -498,6 +498,73 @@
         text-align: right;
       }
 
+      /* answer block */
+      .answer-wrap {
+        padding: 0 14px 16px 54px;
+        border-top: 1px solid var(--border);
+        margin-top: 4px;
+        padding-top: 14px;
+      }
+      .answer-label {
+        font-family: var(--mono);
+        font-size: 10px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 8px;
+      }
+      .answer-text {
+        font-size: 13.5px;
+        line-height: 1.7;
+        color: var(--text2);
+        white-space: pre-line;
+        margin-bottom: 12px;
+      }
+      .code-wrap {
+        position: relative;
+        background: #0b0d13;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .code-wrap-label {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 6px 10px;
+        border-bottom: 1px solid var(--border);
+        font-family: var(--mono);
+        font-size: 10px;
+        color: var(--text3);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .code-wrap pre {
+        margin: 0;
+        padding: 14px;
+        overflow-x: auto;
+      }
+      .code-wrap code {
+        font-family: var(--mono);
+        font-size: 12.5px;
+        line-height: 1.6;
+        color: #c8ceda;
+        white-space: pre;
+      }
+      .code-copy-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--text3);
+        font-size: 13px;
+      }
+      .code-copy-btn:hover {
+        color: var(--text);
+      }
+      .code-copy-btn.copied {
+        color: var(--accent);
+      }
+
       /* empty */
       .empty {
         text-align: center;
@@ -621,6 +688,7 @@
       </div>
     </div>
 
+    <script src="answers.js"></script>
     <script>
       const SECTIONS = [
         "PyTorch Core & Internals",
@@ -3043,7 +3111,53 @@
       </div>
     `;
           card.appendChild(hdr);
+
+          if (isExp) {
+            const a = ANSWERS[q.id];
+            if (a) {
+              const aw = document.createElement("div");
+              aw.className = "answer-wrap";
+              let html = `<div class="answer-label">Answer</div><div class="answer-text">${escapeHtml(
+                a.answer
+              )}</div>`;
+              if (a.code) {
+                html += `
+        <div class="code-wrap">
+          <div class="code-wrap-label">
+            <span>python</span>
+            <button class="code-copy-btn" onclick="event.stopPropagation();copyCode(${
+              q.id
+            }, this)">📋 Copy</button>
+          </div>
+          <pre><code>${escapeHtml(a.code)}</code></pre>
+        </div>`;
+              }
+              aw.innerHTML = html;
+              card.appendChild(aw);
+            }
+          }
+
           list.appendChild(card);
+        });
+      }
+
+      function escapeHtml(s) {
+        return String(s)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      }
+
+      function copyCode(id, btn) {
+        const a = ANSWERS[id];
+        if (!a || !a.code) return;
+        navigator.clipboard.writeText(a.code).then(() => {
+          btn.textContent = "✅ Copied";
+          btn.classList.add("copied");
+          setTimeout(() => {
+            btn.textContent = "📋 Copy";
+            btn.classList.remove("copied");
+          }, 1500);
         });
       }
 
